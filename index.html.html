@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biocírculo · Programación y Flota en Línea v2</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script type="text/javascript" src="https://me.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=veiFYOEjr-1jlOAivVQ2c_3bWS2yDkR4-4oXi9OW5DE2wJimeBMjuAcfqVdPVBKusSIARlEXiMbo4HmMyEE2xyTBgrDoyinqoilPzSmctdiaMoLxR0hTdYwWlu8wXf3Cf2Vh5TspBjEr4gtHco9q1YkjnwGRiZcJOUcdsdnHjPhECx8TXaakp-PigUK7RHwwjP7RJxI52uuj0eQ5ya3dxQUZRqLgvxB1b55fgIOtfzIW30Z7s7IpdCxqhsv3LHVyesqDwfoh592Z-5n355kU6o-9CEboGEZ2j13kSiEi3H13JTxVzb3wrGAa8olRKS7DkpDKK6XwoGtPeOFr4R_ihjvEopQgxxXydoymZ5RBjrSsAsxB3Ke5DXzGSYNWloWg" charset="UTF-8"></script><script type="text/javascript" src="https://me.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=sY8-3pIAVCXYN1EZLR8MaOEzR4NaxZGypHdR-9dW4WH4JAhkD5Y-l8CAxqD8fzxz06kjJtjpR4bGtTreYqN0RF5w9GFOR8GB01Xtf3MOlIp59sisWW2CSZHmz4b61Gu2PFi7kINbFM6cita6LctAxED2K42OHGvjAQ81M0rFUsL04qsG38hmGU7St9W11NgiXeXOlG6odR9MdxnA4RrIgcSfhE_m6-CqyAEgcZ_bpoiR0N_crLiMZ3wdEB3UyT-lHb9wIb7h6BFkMRsZLKmhC4EEJfVS0EGhEIw94k3r54xc5Jtc_2TTPRBbafgG_JErsDjZuJZ2NqB1o-5Fpnc55bUX9-C-x7ONsv9nPuxbloI" charset="UTF-8"></script><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--v1:#1b5e20;--v2:#2e7d32;--v3:#43a047;--v4:#a5d6a7;--v5:#e8f5e9;--gris:#f4f6f5;--txt:#1f2a24;--borde:#d6e2da;--rojo:#c62828;--amb:#f9a825;--azul:#1565c0;--mor:#6a1b9a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--gris);color:var(--txt);font-size:14px}
+header{background:linear-gradient(90deg,var(--v1),var(--v3));color:#fff;padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;letter-spacing:.5px}
+.logo small{display:block;font-weight:400;font-size:12px;opacity:.9}
+header .sp{flex:1}
+.hctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hctl input,.hctl select{border:0;border-radius:6px;padding:6px 8px}
+.sync{font-size:12px;background:rgba(255,255,255,.18);padding:5px 10px;border-radius:20px}
+nav{background:#fff;border-bottom:1px solid var(--borde);display:flex;gap:2px;padding:0 12px;overflow-x:auto;position:sticky;top:0;z-index:500}
+nav button{border:0;background:none;padding:12px 14px;font-size:14px;cursor:pointer;color:#456;border-bottom:3px solid transparent;white-space:nowrap}
+nav button.on{color:var(--v1);border-bottom-color:var(--v3);font-weight:600}
+main{padding:16px;max-width:1500px;margin:auto}
+.sec{display:none}.sec.on{display:block}
+.grid{display:grid;gap:12px}
+.k6{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.c2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
+.card{background:#fff;border:1px solid var(--borde);border-radius:10px;padding:14px}
+.card h3{margin:0 0 10px;font-size:15px;color:var(--v1)}
+.kpi .l{font-size:12px;color:#5b6b62;text-transform:uppercase;letter-spacing:.4px}
+.kpi .v{font-size:26px;font-weight:700;color:var(--v1);margin-top:4px}
+.kpi .s{font-size:12px;color:#5b6b62}
+.kpi.r .v{color:var(--rojo)}.kpi.a .v{color:#b07a00}.kpi.b .v{color:var(--azul)}
+.bar{height:16px;background:#e6ece8;border-radius:9px;overflow:hidden}
+.bar>div{height:100%;background:linear-gradient(90deg,var(--v3),var(--v2));transition:width .4s}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--v5);color:var(--v1);text-align:left;padding:7px 8px;position:sticky;top:0;font-weight:600}
+td{padding:6px 8px;border-bottom:1px solid #edf1ee;vertical-align:middle}
+tr:hover td{background:#fafdfb}
+.tw{max-height:430px;overflow:auto;border:1px solid var(--borde);border-radius:8px}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.p-Pendiente{background:#fff3e0;color:#e65100}.p-Programada{background:#e3f2fd;color:var(--azul)}
+.p-En{background:#ede7f6;color:var(--mor)}.p-Cargada{background:#e8f5e9;color:var(--v2)}
+.p-Recibida{background:#1b5e20;color:#fff}.p-Cancelada{background:#eceff1;color:#607d8b}
+.e-Disponible{background:#e8f5e9;color:var(--v2)}.e-Ruta{background:#ede7f6;color:var(--mor)}
+.e-Cargando{background:#fff8e1;color:#a06c00}.e-Planta{background:#e3f2fd;color:var(--azul)}
+.e-Mant{background:#ffebee;color:var(--rojo)}.e-Inactivo{background:#eceff1;color:#607d8b}
+form.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+label{font-size:12px;color:#4a5a50;display:flex;flex-direction:column;gap:4px;font-weight:600}
+input,select,textarea{font:inherit;padding:7px 9px;border:1px solid #c5d3ca;border-radius:6px;background:#fff}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--v4);border-color:var(--v3)}
+.btn{background:var(--v2);color:#fff;border:0;padding:8px 14px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px}
+.btn:hover{background:var(--v1)}.btn.sec2{background:#fff;color:var(--v2);border:1px solid var(--v3)}
+.btn.sm{padding:4px 9px;font-size:12px}.btn.r{background:var(--rojo)}.btn.b{background:var(--azul)}.btn.m{background:var(--mor)}.btn.a{background:#b07a00}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fil{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:flex-end}
+.fil label{min-width:150px}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.veh{background:#fff;border:1px solid var(--borde);border-left:5px solid var(--v3);border-radius:9px;padding:10px 12px}
+.veh .pl{font-size:18px;font-weight:800;letter-spacing:1px}
+.veh .mini{font-size:12px;color:#5b6b62}
+#mapa{height:420px;border-radius:8px;border:1px solid var(--borde)}
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:2000;padding:12px}
+.mbg.on{display:flex}
+.modal{background:#fff;border-radius:12px;max-width:620px;width:100%;max-height:92vh;overflow:auto;padding:18px}
+.modal h3{margin-top:0;color:var(--v1)}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--v1);color:#fff;padding:10px 16px;border-radius:8px;z-index:3000;display:none;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.muted{color:#6b7b72;font-size:12px}
+.alert{background:#fff8e1;border:1px solid #ffe082;padding:8px 12px;border-radius:8px;font-size:12.5px;margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--v5);border:1px solid var(--v4);border-radius:14px;padding:3px 10px;font-size:12px}
+.chip.x{background:#fff3e0;border-color:#ffcc80}
+.sem{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px}.sem i{width:11px;height:11px;border-radius:50%;display:inline-block}.sem.verde i{background:#2e7d32}.sem.amarillo i{background:#f9a825}.sem.rojo i{background:#c62828;box-shadow:0 0 0 3px #ffcdd2}.cap-ok{color:#2e7d32}.cap-warn{color:#b06b00}.cap-over{color:#c62828;font-weight:700}
+.hbar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12.5px}
+.hbar .n{width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar .t{flex:1;height:14px;background:#e6ece8;border-radius:7px;overflow:hidden;position:relative}
+.hbar .t div{height:100%;background:var(--v3)}
+.hbar .t div.o{background:var(--rojo)}
+.hbar .val{width:120px;text-align:right}
+pre.code{background:#0f1f15;color:#c8f7d0;padding:12px;border-radius:8px;overflow:auto;font-size:12px;max-height:340px}
+ol li{margin-bottom:6px}
+@media(max-width:640px){.c2{grid-template-columns:1fr}.kpi .v{font-size:22px}main{padding:10px}}
+@media print{nav,header .hctl,.btn{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <svg width="38" height="38" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="none" stroke="#fff" stroke-width="3"/><path d="M20 8 a12 12 0 1 1 -10.4 6" fill="none" stroke="#a5d6a7" stroke-width="3.5" stroke-linecap="round"/><path d="M7 10 l3 5 l5 -2.5" fill="none" stroke="#a5d6a7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 23 q5 -10 12 -8 q-2 8 -12 8z" fill="#fff"/></svg>
+    <div>BIOCÍRCULO S.A.S<small>Programación diaria · Flota · Inventario · v2</small></div>
+  </div>
+  <div class="sp"></div>
+  <div class="hctl">
+    <span id="rolTag" class="sync"></span>
+    <label style="color:#fff;flex-direction:row;align-items:center">Fecha&nbsp;<input type="date" id="gFecha"></label>
+    <span class="sync" id="syncTag">● Local</span>
+    <button class="btn sm sec2" id="btnSync" type="button">⟳ Sincronizar</button>
+  </div>
+</header>
+<nav id="nav">
+  <button data-s="panel" class="on">📊 Panel del día</button>
+  <button data-s="sol">📝 Solicitudes promotoras</button>
+  <button data-s="prog">🗓️ Programación</button>
+  <button data-s="flota">🚚 Flota y ubicación</button>
+  <button data-s="cargue">⚖️ Cargue y báscula</button>
+  <button data-s="inv">📦 Inventario diario</button>
+  <button data-s="cond">📱 Vista conductor</button>
+  <button data-s="cfg">⚙️ Configuración</button>
+</nav>
+<main>
+
+<!-- ============ PANEL ============ -->
+<section class="sec on" id="s-panel">
+  <div class="fil">
+    <label>Promotora<select id="pPromo"></select></label>
+    <span class="muted" id="pAct"></span>
+  </div>
+  <div class="grid k6" id="kpis"></div>
+  <div class="card" style="margin-top:12px">
+    <div class="row" style="justify-content:space-between"><b>Avance de la meta del día</b><span id="avTxt" class="muted"></span></div>
+    <div class="bar" style="margin-top:8px"><div id="avBar" style="width:0"></div></div>
+  </div>
+  <div class="grid c2" style="margin-top:12px">
+    <div class="card"><h3>Avance por promotora</h3><div class="tw" style="max-height:300px"><table id="tPromo"></table></div></div>
+    <div class="card"><h3>Ocupación de flota hoy (kg asignados vs capacidad)</h3><div id="ocup" style="max-height:300px;overflow:auto"></div></div>
+  </div>
+  <div class="grid c2" style="margin-top:12px">
+    <div class="card"><h3>✅ Proveedores cargados <span id="nCarg" class="muted"></span></h3><div class="chips" id="chCarg"></div></div>
+    <div class="card"><h3>⏳ Proveedores pendientes por cargar <span id="nPend" class="muted"></span></h3><div class="chips" id="chPend"></div></div>
+  </div>
+  <div class="grid c2" style="margin-top:12px">
+    <div class="card"><h3>Kg por material (cargado vs solicitado)</h3><div id="pMat"></div></div>
+    <div class="card"><h3>Estado de la flota ahora</h3><div id="pFlota"></div></div>
+  </div>
+</section>
+
+<!-- ============ SOLICITUDES ============ -->
+<section class="sec" id="s-sol">
+  <div class="card">
+    <h3>Nueva solicitud de recolección</h3>
+    <form class="f" id="fSol">
+      <label>Fecha de recolección<input type="date" name="fecha" required></label>
+      <label>Promotora<select name="promotora" id="solPromo" required></select></label>
+      <label style="grid-column:span 2">Proveedor (escriba nombre o NIT)<input name="prov" id="solProv" list="dlProv" required autocomplete="off" placeholder="Buscar proveedor de la promotora..."></label>
+      <label>Material principal<select name="material" id="solMat" required></select></label>
+      <label>Kg estimados<input type="number" name="kgEst" min="1" step="1" required></label>
+      <label>Pacas / bultos aprox.<input type="number" name="pacas" min="0" step="1"></label>
+      <label>Zona / municipio<input name="zona" placeholder="Ej: Engativá, Mosquera"></label>
+      <label style="grid-column:span 2">Dirección de cargue<input name="dir" placeholder="Dirección exacta"></label>
+      <label>Hora disponible para cargue<input type="time" name="franja" step="1800" required></label>
+      <label>Prioridad<select name="prioridad"><option>Normal</option><option>Alta</option><option>Urgente</option></select></label>
+      <label>Vehículo sugerido<select name="tipoReq"><option value="">Indiferente</option><option>CAMIONETA</option><option>CAMION</option></select></label>
+      <label style="grid-column:1/-1">Observaciones<textarea name="obs" rows="2"></textarea></label>
+      <div class="row"><button class="btn" type="submit">Enviar solicitud</button><span class="muted" id="solMsg"></span></div>
+    </form>
+    <datalist id="dlProv"></datalist>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3>Solicitudes registradas</h3>
+    <div class="fil">
+      <label>Promotora<select id="lsPromo"></select></label>
+      <label>Estado<select id="lsEst"></select></label>
+      <label>Buscar<input id="lsQ" placeholder="Proveedor, zona..."></label>
+      <button class="btn sm sec2" type="button" id="btnCsvSol">⬇ Exportar CSV</button>
+    </div>
+    <div class="tw"><table id="tSol"></table></div>
+  </div>
+</section>
+
+<!-- ============ PROGRAMACION ============ -->
+<section class="sec" id="s-prog">
+  <div class="alert">Asigne vehículo y hora a cada solicitud. <b>Auto-programar</b> reparte las solicitudes pendientes del día entre los vehículos disponibles, respetando capacidad, prioridad y tipo de vehículo sugerido.</div>
+  <div class="row" style="margin-bottom:10px">
+    <button class="btn" type="button" id="btnAuto">⚡ Auto-programar pendientes</button>
+    <button class="btn sec2" type="button" id="btnPrint">🖨 Imprimir programación</button>
+    <button class="btn sec2" type="button" id="btnWa">📋 Copiar programación (WhatsApp)</button>
+  </div>
+  <div class="grid c2">
+    <div class="card"><h3>Solicitudes por programar <span class="muted" id="nPorProg"></span></h3><div class="tw"><table id="tPorProg"></table></div></div>
+    <div class="card"><h3>Programación por vehículo</h3><div id="progVeh" style="max-height:520px;overflow:auto"></div></div>
+  </div>
+</section>
+
+<!-- ============ FLOTA ============ -->
+<section class="sec" id="s-flota">
+  <div class="grid c2">
+    <div class="card"><h3>Mapa de ubicación de vehículos</h3><div id="mapa"></div><div class="muted" id="mapaMsg" style="margin-top:6px">Se muestran los vehículos con la última ubicación GPS reportada.</div></div>
+    <div class="card"><h3>Resumen de disponibilidad</h3><div id="fRes"></div>
+      <h3 style="margin-top:14px">Últimos reportes de ubicación</h3><div class="tw" style="max-height:250px"><table id="tUbic"></table></div></div>
+  </div>
+  <div class="fil" style="margin-top:12px">
+    <label>Tipo<select id="fTipo"><option value="">Todos</option></select></label>
+    <label>Estado<select id="fEst"><option value="">Todos</option></select></label>
+    <label>Buscar<input id="fQ" placeholder="Placa, conductor..."></label>
+  </div>
+  <div class="vgrid" id="vGrid"></div>
+</section>
+
+<!-- ============ CARGUE ============ -->
+<section class="sec" id="s-cargue">
+  <div class="alert">Registre aquí el <b>kg cargado donde el proveedor</b> y el <b>peso de báscula</b> al llegar a planta. El peso de báscula alimenta automáticamente el inventario diario.</div>
+  <div class="fil"><label>Estado<select id="cgEst"><option value="act">Programadas / en ruta / cargadas</option><option value="">Todas</option><option value="Recibida en planta">Recibidas en planta</option></select></label></div>
+  <div class="card"><div class="tw" style="max-height:600px"><table id="tCargue"></table></div></div>
+</section>
+
+<!-- ============ INVENTARIO ============ -->
+<section class="sec" id="s-inv">
+  <div class="grid c2">
+    <div class="card">
+      <h3>Registrar movimiento de inventario</h3>
+      <form class="f" id="fInv">
+        <label>Fecha<input type="date" name="fecha" required></label>
+        <label>Material<select name="material" id="invMat" required></select></label>
+        <label>Tipo<select name="tipo"><option>Conteo físico (saldo inicial)</option><option>Salida / despacho</option><option>Ajuste (+/-)</option><option>Entrada manual</option></select></label>
+        <label>Kg<input type="number" name="kg" step="1" required></label>
+        <label style="grid-column:1/-1">Observación / cliente / remisión<input name="obs"></label>
+        <div><button class="btn" type="submit">Guardar movimiento</button></div>
+      </form>
+      <p class="muted">Las entradas por recolección se suman solas desde "Cargue y báscula" (estado <i>Recibida en planta</i>).</p>
+    </div>
+    <div class="card"><h3>Inventario del día por material (kg)</h3><div class="tw"><table id="tInv"></table></div></div>
+  </div>
+  <div class="card" style="margin-top:12px"><h3>Movimientos del día</h3><div class="tw"><table id="tInvMov"></table></div></div>
+</section>
+
+<!-- ============ CONDUCTOR ============ -->
+<section class="sec" id="s-cond">
+  <div class="card">
+    <div class="fil"><label>Placa<select id="cdPlaca"></select></label><span class="muted">Enlace directo para cada conductor: <code id="cdLink"></code></span></div>
+    <div id="cdBox"></div>
+  </div>
+</section>
+
+<!-- ============ CONFIG ============ -->
+<section class="sec" id="s-cfg">
+  <div class="grid c2">
+    <div class="card">
+      <h3>Parámetros de operación</h3>
+      <form class="f" id="fCfg">
+        <label>Meta diaria por defecto (kg)<input type="number" name="metaDef" min="0"></label>
+        <label>Meta para la fecha seleccionada (kg)<input type="number" name="metaDia" min="0"></label>
+        <label style="grid-column:1/-1">Materiales (separados por coma)<textarea name="mats" rows="3"></textarea></label>
+        <label style="grid-column:1/-1">URL de sincronización en línea (Google Apps Script)<input name="url" placeholder="https://script.google.com/macros/s/.../exec"></label>
+        <div><button class="btn" type="submit">Guardar configuración</button></div>
+      </form>
+    </div>
+    <div class="card">
+      <h3>Respaldo y datos</h3>
+      <div class="row">
+        <button class="btn sec2" type="button" id="btnExp">⬇ Descargar respaldo (JSON)</button>
+        <label class="btn sec2" style="flex-direction:row">⬆ Importar respaldo<input type="file" id="fileImp" accept=".json" style="display:none"></label>
+        <button class="btn a" type="button" id="btnDemo">Cargar datos de ejemplo</button><button class="btn r" type="button" id="btnDemoX">Quitar datos de ejemplo</button>
+      </div>
+      <h3 style="margin-top:16px">Alertas de calidad en las bases</h3>
+      <div id="dq" class="muted"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3>Flota (editar estado administrativo y capacidad)</h3>
+    <div class="tw"><table id="tFlotaCfg"></table></div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3>Cómo ponerlo en línea (multiusuario y automático)</h3>
+    <ol>
+      <li>Cree una Hoja de cálculo de Google vacía llamada <b>Biocirculo Programacion</b>.</li>
+      <li>Menú <b>Extensiones → Apps Script</b>. Borre el contenido y pegue el código de abajo. Guarde.</li>
+      <li><b>Implementar → Nueva implementación → Tipo: Aplicación web</b>. Ejecutar como: <i>Yo</i>. Acceso: <i>Cualquier persona</i>. Copie la URL que termina en <code>/exec</code>.</li>
+      <li>Pegue esa URL arriba en "URL de sincronización" y guarde. Desde ese momento todo se guarda en la hoja (pestañas solicitudes, ubicaciones, inventario, vehiculos) y se actualiza cada 30 segundos en todos los equipos.</li>
+      <li>Publique este archivo HTML (SharePoint/OneDrive con enlace, GitHub Pages, o como archivo compartido) y entregue los enlaces por rol:
+        <ul><li>Promotora: <code>…archivo.html?rol=promotora&amp;nombre=LUZ</code></li>
+        <li>Conductor: <code>…archivo.html?rol=conductor&amp;placa=GDY421</code></li>
+        <li>Coordinación: el enlace sin parámetros.</li></ul></li>
+      <li>Para el GPS del conductor el archivo debe abrirse desde una dirección <b>https</b> (por ejemplo GitHub Pages) y el celular debe permitir la ubicación.</li>
+    </ol>
+    <button class="btn sm sec2" type="button" id="btnCopyGs">📋 Copiar código Apps Script</button>
+    <pre class="code" id="gsCode"></pre>
+  </div>
+</section>
+</main>
+
+<div class="mbg" id="mbg"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script type="text/plain" id="gs-src">
+/** BIOCÍRCULO · Backend en Google Sheets para Programación y Flota
+ *  Pegar en Extensiones > Apps Script e implementar como Aplicación web (Acceso: Cualquier persona). */
+const TABLAS = ['solicitudes','ubicaciones','inventario','vehiculos','config'];
+
+function hoja_(nombre){
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(nombre);
+  if(!sh){ sh = ss.insertSheet(nombre); sh.appendRow(['id','updatedAt']); sh.setFrozenRows(1); }
+  return sh;
+}
+
+function doGet(e){
+  const out = {tables:{}};
+  TABLAS.forEach(t=>{
+    const sh = hoja_(t); const v = sh.getDataRange().getValues(); const h = v.shift();
+    out.tables[t] = v.filter(r=>r[0]!=='').map(r=>{ const o={}; h.forEach((k,i)=>{ let x=r[i]; if(x instanceof Date) x=Utilities.formatDate(x,'America/Bogota','yyyy-MM-dd'); o[k]=x; }); return o; });
+  });
+  return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e){
+  const lock = LockService.getScriptLock(); lock.waitLock(20000);
+  try{
+    const body = JSON.parse(e.postData.contents);
+    if(body.action!=='upsert' || TABLAS.indexOf(body.table)<0) throw new Error('Solicitud no valida');
+    const sh = hoja_(body.table);
+    let h = sh.getRange(1,1,1,sh.getLastColumn()).getValues()[0];
+    body.records.forEach(rec=>{ Object.keys(rec).forEach(k=>{ if(h.indexOf(k)<0){ h.push(k); sh.getRange(1,h.length).setValue(k); } }); });
+    const ids = sh.getLastRow()>1 ? sh.getRange(2,1,sh.getLastRow()-1,1).getValues().map(r=>String(r[0])) : [];
+    body.records.forEach(rec=>{
+      const fila = h.map(k=>{ const x=rec[k]; return (x!==null && typeof x==='object') ? JSON.stringify(x) : (x===undefined?'':x); });
+      const i = ids.indexOf(String(rec.id));
+      let r;
+      if(i>=0){ const actual = sh.getRange(i+2,2).getValue(); if(Number(actual)>Number(rec.updatedAt)) return; r = i+2; }
+      else { r = sh.getLastRow()+1; ids.push(String(rec.id)); }
+      sh.getRange(r,1,1,h.length).setNumberFormat('@').setValues([fila.map(String)]);
+    });
+    return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
+  } catch(err){
+    return ContentService.createTextOutput(JSON.stringify({ok:false,error:String(err)})).setMimeType(ContentService.MimeType.JSON);
+  } finally { lock.releaseLock(); }
+}
+</script>
+<script>
+(function(){
+'use strict';
+/* ================= DATOS BASE ================= */
+const FLOTA_BASE = [{"n": 1, "placa": "GDY421", "transp": "ELIAS NAÑEZ", "cond": "VICTOR ALFONSO GRANADA ARIAS", "aux": "", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V1"}, {"n": 2, "placa": "EYZ060", "transp": "CRISTIAN RAMIREZ", "cond": "CRISTIAN RAMIREZ", "aux": "ANDREA ARGUELLO OSPINA", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V2"}, {"n": 3, "placa": "TLN054", "transp": "ANDRES BUSTOS", "cond": "ANDRES BUSTOS", "aux": "", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V3"}, {"n": 4, "placa": "SPQ696", "transp": "JEFERSON CASTRO CASTRO", "cond": "JEFERSON CASTRO CASTRO", "aux": "", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V4"}, {"n": 5, "placa": "CRZ892", "transp": "JEFERSON CASTRO CASTRO", "cond": "JEFERSON CASTRO CASTRO", "aux": "", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "INACTIVO", "id": "V5"}, {"n": 6, "placa": "BDI037", "transp": "MARICELA OSPINA ORTIZ", "cond": "FELIX AURELIO PERNIA DIAZ", "aux": "WILSON ANGEL LEON PAEZ", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V6"}, {"n": 7, "placa": "JGC627", "transp": "ANDRES LOPEZ BRICEÑO", "cond": "JAIRO LOPEZ ROBERTO", "aux": "", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V7"}, {"n": 8, "placa": "BHK114", "transp": "LEIDY JOHANA SANDOVAL VARGAS", "cond": "EDWIN EDUARDO MANRIQUE LEÓN", "aux": "", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V8"}, {"n": 9, "placa": "WGY340", "transp": "WILSON ANGEL LEON PAEZ", "cond": "LUZ HELENA OCHOA ROBAYO", "aux": "LINDA KATERINE AZUERO LIZARAZO", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V9"}, {"n": 10, "placa": "USE776", "transp": "ANDRES BUSTOS", "cond": "JAVIER ALDANA SANABRIA", "aux": "", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V10"}, {"n": 11, "placa": "LLQ144", "transp": "PAOLA ANDREA VILLA SANCHEZ", "cond": "DIEGO ALFONSO VERA ESPINOZA", "aux": "", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V11"}, {"n": 12, "placa": "TBZ854", "transp": "CARLOS SOLU CASTRO CASTRO", "cond": "KEVIN CASTILLO CIFUENTES", "aux": "", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V12"}, {"n": 13, "placa": "WFR404", "transp": "ROBINSON SISA OLLAGA", "cond": "ROBINSON SISA OLLAGA", "aux": "", "tipo": "CAMION", "pacas": "600", "cap": 2500, "sellos": "DOS", "estado": "ACTIVO", "id": "V13"}, {"n": 14, "placa": "JKU220", "transp": "METALICOS HR SAS", "cond": "JOSE JESUS ENRRIQUE RANGEL PEÑA", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "DOS", "estado": "ACTIVO", "id": "V14"}, {"n": 15, "placa": "TLO331", "transp": "JOSE MARIA QUEVEDO VARGAS", "cond": "EDWIN SANTIAGO PARDO RUEDA", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "DOS", "estado": "ACTIVO", "id": "V15"}, {"n": 16, "placa": "QFZ247", "transp": "ELIAS NAÑEZ", "cond": "ANYI LORENA RAMOS", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "UNO", "estado": "ACTIVO", "id": "V16"}, {"n": 17, "placa": "WNK942", "transp": "LUZ ANGELA RODRIGUEZ RAMOS", "cond": "DIEGO MEDINA", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "DOS", "estado": "ACTIVO", "id": "V17"}, {"n": 18, "placa": "EYX660", "transp": "LUZ ANGELA RODRIGUEZ RAMOS", "cond": "DAIRON ESMITH ACOSTA URREA", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "UNO", "estado": "ACTIVO", "id": "V18"}, {"n": 19, "placa": "WPM225", "transp": "MARIO ALBERTO ACOSTA", "cond": "CRISTIAN CAMILO PINEDA RODRIGUEZ", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "DOS", "estado": "ACTIVO", "id": "V19"}, {"n": 20, "placa": "OAA529", "transp": "ANDRES LOPEZ BRICEÑO", "cond": "ANDRES LOPEZ BRICEÑO", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "DOS", "estado": "ACTIVO", "id": "V20"}, {"n": 21, "placa": "WDP566", "transp": "ANA LYDIA RODRIGUEZ MESA", "cond": "YEIMI CARLONA SALINAS BARRERA", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "DOS", "estado": "ACTIVO", "id": "V21"}, {"n": 22, "placa": "FSU714", "transp": "DIANA MILENA RODRIGUEZ PUENTES", "cond": "ARNOLDO PEÑA RAMIREZ", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "DOS", "estado": "ACTIVO", "id": "V22"}, {"n": 23, "placa": "VCA326", "transp": "ELIAS NAÑEZ", "cond": "LUIS ANCIZAR AROCA YATE", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "UNO", "estado": "ACTIVO", "id": "V23"}, {"n": 24, "placa": "PMT773", "transp": "LUIS EDUARDO SANCHEZ MOREIBA", "cond": "FABIAN ARANA", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "DOS", "estado": "ACTIVO", "id": "V24"}, {"n": 25, "placa": "LLQ144", "transp": "SEGUNDA TIRADO", "cond": "LEYDER ANTONIO ORTEGA SARABIA", "aux": "", "tipo": "CAMIONETA", "pacas": "300", "cap": 1300, "sellos": "DOS", "estado": "ACTIVO", "id": "V25"}, {"n": 26, "placa": "KNZ956", "transp": "JAIME EDILSON GONZALEZ SANCHEZ", "cond": "JAIME EDILSON GONZALEZ SANCHEZ", "aux": "", "tipo": "SIN DEFINIR", "pacas": "", "cap": 0, "sellos": "", "estado": "ACTIVO", "id": "V26"}, {"n": 27, "placa": "LCN151", "transp": "NEFTALY FLOREZ", "cond": "JHONATAN ANDRES LONDOÑO BERMUDEZ", "aux": "", "tipo": "SIN DEFINIR", "pacas": "", "cap": 0, "sellos": "", "estado": "ACTIVO", "id": "V27"}, {"n": 28, "placa": "TSP926", "transp": "JIMMY ALEXANDER CRUZ ORGANISTA", "cond": "JHONATAN DAVID CRUZ GUERRERO", "aux": "", "tipo": "SIN DEFINIR", "pacas": "", "cap": 0, "sellos": "", "estado": "ACTIVO", "id": "V28"}, {"n": 29, "placa": "LUM846", "transp": "FELIX EDUARDO RAMOS BURGOS", "cond": "SAMUEL DAVID BUSTOS RODRIGUEZ", "aux": "", "tipo": "SIN DEFINIR", "pacas": "", "cap": 0, "sellos": "", "estado": "ACTIVO", "id": "V29"}];
+const PROV_BASE = [{"c": "3236886", "n": "HERIBERTO MORA PINZON", "p": "MILENA"}, {"c": "17592004", "n": "EDUARD JOSE RODRIGUEZ DIAZ", "p": "BIO"}, {"c": "52276084", "n": "LILIANA DAZA ROCIO", "p": "BIO"}, {"c": "80183312", "n": "JOSE DAVID CIFUENTES PRADO", "p": "BIO"}, {"c": "900328828", "n": "FUNDACION PROGRESANDO JUNTOS POR COLOMBIA", "p": "MAYERLIN"}, {"c": "900429985", "n": "ECOPOSITIVA SAS ESP", "p": "BIO"}, {"c": "900459611", "n": "PROMOTORA PROFES RENOV RECUP DDHH SAS", "p": "BIO"}, {"c": "900465013", "n": "METALES M Y A SAS", "p": "MAYERLIN"}, {"c": "900621860", "n": "ASOCIACION DE RECUPERADORES AMBIENTALES ASEO ECOACTIVA", "p": "MAYERLIN"}, {"c": "900621860", "n": "ASOCIACION DE RECUPERADORES AMBIENTALES", "p": "BIO"}, {"c": "900720318", "n": "EKOPLANET SAS", "p": "BIO"}, {"c": "900733078", "n": "ASOCIACION ECO RESIDUOS", "p": "BIO"}, {"c": "900770381", "n": "ASOC DE RECICL ECOPLANETA EL AMPARO ESP", "p": "BIO"}, {"c": "900995433", "n": "ASOCIACION DE RECICLADORES MOSQUERA ECOLOGICA", "p": "BIO"}, {"c": "901058446", "n": "ASOCIACION DE RECICL CON CANITAS DE VILLAVICENCIO", "p": "BIO"}, {"c": "901066428", "n": "ASOC. MUNDIAL RECICLADOR POR EL PLANETA", "p": "LUZ"}, {"c": "901076846", "n": "ASOMUNAR ESP", "p": "BIO"}, {"c": "901257114", "n": "PAPELES Y METALES ECO-AMBIENTALES SAS", "p": "BIO"}, {"c": "901267075", "n": "ASOC. DE RECICLADORES POR UNA VIDA MEJOR", "p": "BIO"}, {"c": "901295021", "n": "SOLUCIONES AMBIENTALES MARIN", "p": "MILENA"}, {"c": "901303951", "n": "APROVECHAMIENTO CIRCULAR SAS", "p": "LUZ"}, {"c": "901314695", "n": "ASOCIACION DE RECICLADORES ANBIENTALES", "p": "BIO"}, {"c": "901326051", "n": "ACREGUP E.S.P.", "p": "BIO"}, {"c": "901336722", "n": "SERVIAPROVECHABLES SAS", "p": "MAYERLIN"}, {"c": "901344125", "n": "ASOCIACIÓN DE RECICLAJE DE RESIDUOS SÓLIDOS APROVECHABLES - ASORECYCLE", "p": "BIO"}, {"c": "901356203", "n": "ASOCIACION RECTULUA", "p": "BIO"}, {"c": "901361195", "n": "ASOCIACIÓN DE RECICLADORES LA PROSPERIDAD", "p": "BIO"}, {"c": "901374867", "n": "ASOECOLOGIA VERDE", "p": "BIO"}, {"c": "901456317", "n": "MOLINA PAEZ Y ASOCIADOS SAS", "p": "BIO"}, {"c": "901457950", "n": "ECOPET EARTH SAS", "p": "BIO"}, {"c": "1051588836", "n": "JAVIER IGNACIO MEDINA GARCIA", "p": "LUZ"}, {"c": "901457407", "n": "ASOCIACION DE RECICLADORES VIDA NUEVA", "p": "LUZ"}, {"c": "52539196", "n": "SANDRA MILENA MEQUIRUCAMA LOAIZA", "p": "BIO"}, {"c": "901301110", "n": "ECORPET SAS", "p": "MAYERLIN"}, {"c": "901139325", "n": "FUNDACION GEO VERDE", "p": "LUZ"}, {"c": "52737565", "n": "SANDRA PATRICIA RIVEROS REY", "p": "BIO"}, {"c": "900377897", "n": "GESTION RENOVADORA S.A.S", "p": "LUZ"}, {"c": "901320858", "n": "AGAVCA SAS", "p": "BIO"}, {"c": "901470810", "n": "ASOCIACION CIUDAD VERDE", "p": "BIO"}, {"c": "52422938", "n": "LUZ OMAIRA ESPINOSA SANTOS", "p": "BIO"}, {"c": "901263858", "n": "ASOC. DE RECICLADORES PROTECTORES ARPPA", "p": "BIO"}, {"c": "79495416", "n": "ALVARO JOSE LESMES MORENO", "p": "BIO"}, {"c": "900877555", "n": "ASOCIACION BASICA RECICLAJE SINEAMBORE", "p": "MAYERLIN"}, {"c": "17116478", "n": "TEODULO RAMIREZ BUITRAGO", "p": "BIO"}, {"c": "7221698", "n": "EDILBERTO PEREZ PEREZ", "p": "BIO"}, {"c": "901443881", "n": "ASOCIACION DE RECUPERADORES PROAMBIENTE SOSTENIBLE", "p": "BIO"}, {"c": "900562950", "n": "INVERSIONES EL FERROCARRIL SAS", "p": "BIO"}, {"c": "900792184", "n": "CORPORACION DE RECICLADORES DE ENGATIVA", "p": "LUZ"}, {"c": "3184572", "n": "ALFONSO CRUZ LUIS", "p": "LUZ"}, {"c": "901165395", "n": "SCHOONER BIGTH ETHNIC ASSOCIATION", "p": "LUZ"}, {"c": "900755167", "n": "ASOCIACION NACIONAL DE RECUPERADORES AMBIENTALES E S P", "p": "BIO"}, {"c": "901092973", "n": "ASOC. RECUP. DEL RECICLAJE ROCA VERDE", "p": "BIO"}, {"c": "901061697", "n": "ASOC RECICL PUNTO CALIDAD DE VIDA ESP", "p": "BIO"}, {"c": "900786951", "n": "PROAMBIENTAL Y PLASTICOS KF SAS", "p": "BIO"}, {"c": "2966054", "n": "FREDY RAMIREZ AVILA", "p": "BIO"}, {"c": "900266346", "n": "ASOCIACION DE RECICLADORES DE ENGATIVA ZONA 10", "p": "BIO"}, {"c": "79163417", "n": "DAVID OLARTE LANCHEROS", "p": "BIO"}, {"c": "901286219", "n": "ELGUZRAM S.A.S", "p": "BIO"}, {"c": "79604724", "n": "PEDRO FELIPE LESMES MORENO", "p": "BIO"}, {"c": "901542108", "n": "REPROPLAST LA SAS", "p": "LUZ"}, {"c": "11185209", "n": "ORLANDO MUÑOZ PIRATOBA", "p": "BIO"}, {"c": "901488215", "n": "ASOCIACION DE RECICLADORES BIOCRECER JR", "p": "MAYERLIN"}, {"c": "52050435", "n": "LUZ MARINA GOMEZ TIBAQUE", "p": "BIO"}, {"c": "41634141", "n": "ALBA MIRIAM MARTINEZ DE ACERO", "p": "MAYERLIN"}, {"c": "901565555", "n": "ASOCIACIÓN DE RECICLADORES ECO PROJECT", "p": "BIO"}, {"c": "901299762", "n": "ASOCIACION ECO RECICLAJE CAPITAL ERC", "p": "MAYERLIN"}, {"c": "901433264", "n": "ASOCIACION DE RECICLADORES COMPROMETIDOS Y ORGANIZADOS", "p": "LUZ"}, {"c": "1073240179", "n": "JONATHAN RODRIGUEZ ACERO", "p": "LUZ"}, {"c": "901252121", "n": "ASOCIACION INTEGRAL DE RECICLADORES ECOL", "p": "BIO"}, {"c": "900868979", "n": "RECUPERADORA AMBIENTAL ENGATIVA", "p": "MILENA"}, {"c": "901576624", "n": "RECUPERADORA DE MATERIALES RECICLABLES MILENA S.A.S.", "p": "MAYERLIN"}, {"c": "901522586", "n": "ASOCIACION VIDA VERDE RECICLADORES E.S.P", "p": "BIO"}, {"c": "1123308930", "n": "CLAUDIA MARIBEL LEYTON CRUZ", "p": "BIO"}, {"c": "900237359", "n": "ASOCIACIACION DE RECICLADORES NUEVA GENE", "p": "BIO"}, {"c": "901022017", "n": "COOPRECUPERARFACA", "p": "LUZ"}, {"c": "7167383", "n": "JOSE RAUL GIL GOMEZ", "p": "MAYERLIN"}, {"c": "901535067", "n": "LA RECICLADORA DE TU BARRIO SAS ESP", "p": "BIO"}, {"c": "901455002", "n": "ASOCIACION DE RECICLADORES RECICLAJE ESPECIAL", "p": "BIO"}, {"c": "900361746", "n": "CORPORACION DE RECICLAJE ECOLOGIA ASEO Y", "p": "BIO"}, {"c": "901413324", "n": "ASO SALVANDO LA TIERRA BC", "p": "MILENA"}, {"c": "24212392", "n": "MORENO SIERRA MARINA", "p": "BIO"}, {"c": "901048261", "n": "ASORECICLA 7 ESP", "p": "LUZ"}, {"c": "901373052", "n": "ASOCIACION PLANETA RECICLABLE ASOPLANET", "p": "BIO"}, {"c": "901452698", "n": "ASOCIACION DE RECICLADORES P&L", "p": "LUZ"}, {"c": "1073505163", "n": "JENNY JAZMIN ULLOA PEÑA", "p": "BIO"}, {"c": "901112432", "n": "ASOCIACION ASORECICLAMOS", "p": "BIO"}, {"c": "52825970", "n": "LUZ ANGELA RODRIGUEZ RAMOS", "p": "BIO"}, {"c": "901364866", "n": "FRACTAL ESTRATEGIAS SOSTENIBLES SAS", "p": "BIO"}, {"c": "901113091", "n": "FUNDACION PRO HAMBIENTAL Y SOCIAL LINAJE", "p": "MAYERLIN"}, {"c": "901029612", "n": "ASOCIACION DE RECICLADORES CICLO AMBIENTAL E.S.P", "p": "MAYERLIN"}, {"c": "901544014", "n": "ASOCIACION DE RECICLADORES TRABAJANDO PARA SALVAR EL PLANETA", "p": "BIO"}, {"c": "52481603", "n": "LUCILA TOVAR CASTRO", "p": "BIO"}, {"c": "901438427", "n": "ASOCIACION GREMIAL DE RECICLADORES ECOCHIQUINQUIRA ESP", "p": "LUZ"}, {"c": "901545633", "n": "ASOCIACION DE RECICLADORES SAN FRANCISCO DE ASIS", "p": "BIO"}, {"c": "901701608", "n": "RECUPERADORA LA 24 S.A.S.", "p": "BIO"}, {"c": "900719883", "n": "COOPERATIVA DE RECU. ASO. TEUSAQUILLO", "p": "MILENA"}, {"c": "1022343703", "n": "NELSON FERNEY REYES CAVIEDES", "p": "BIO"}, {"c": "900552720", "n": "HABITAT SOLUCIONES INTEGRALES S.A.S", "p": "BIO"}, {"c": "901755022", "n": "RECUPERADORA AMBIENTAL ECOSER SAS", "p": "BIO"}, {"c": "900226457", "n": "TREMP PET S.A.S", "p": "BIO"}, {"c": "901440820", "n": "ASOCIACION DE RECICLADORES PRESERVANDO EL MEDIO AMBIENTE", "p": "BIO"}, {"c": "79116261", "n": "CARLOS VARGAS GALEANO", "p": "BIO"}, {"c": "901458029", "n": "FACTOR AMBIENTAL S.A.S", "p": "BIO"}, {"c": "901426087", "n": "ASOCIACION DE RECICLADORES EQUILIBRIO HUELLA AMBIENTAL", "p": "BIO"}, {"c": "79365550", "n": "ALVARO LAVERDE BOHORQUEZ", "p": "BIO"}, {"c": "900771773", "n": "RECICLADORA LA 22 LTDA", "p": "BIO"}, {"c": "830056228", "n": "ASOCIACION COLOMBIANA DE RECICLADORES GA", "p": "BIO"}, {"c": "901563961", "n": "ASOCIACION NACIONAL DE RECICLADORES SEMILLAS DEL FUTURO E.S.P", "p": "MAYERLIN"}, {"c": "901453583", "n": "ASOCIACIÓN SOLIDARIA DE RECICLADORES UNIDOS POR CUNDINAMARCA", "p": "LUZ"}, {"c": "901494752", "n": "ASOCIACION DE RECUPERADORES AMBIENTALES DEL FUTURO", "p": "BIO"}, {"c": "79699707", "n": "HERMAN JEREMIAS LESMEZ MORENO", "p": "BIO"}, {"c": "11220574", "n": "PABLO ANTONIO ARIAS SALAZAR", "p": "BIO"}, {"c": "1233339669", "n": "JHAN CARLO TAPIAS CORDERO", "p": "MAYERLIN"}, {"c": "901422258", "n": "ASOCIACION DE RECICLADORES UNIDOS SOMOS MAS", "p": "BIO"}, {"c": "830024104", "n": "URBASER COLOMBIA S A E.S.P", "p": "BIO"}, {"c": "901674875", "n": "INVERSIONES GREENEX AMBIENTAL SAS", "p": "BIO"}, {"c": "901153034", "n": "APROREC SAS", "p": "BIO"}, {"c": "901809038", "n": "CONVERGENCIA AMBIENTAL S.A.S.", "p": "LUZ"}, {"c": "19474849", "n": "JORGE ENRIQUE QUECAN CONDE", "p": "MILENA"}, {"c": "901798197", "n": "OLA VERDE S.A.S", "p": "BIO"}, {"c": "900563546", "n": "ASOCIACION DE RECICLADORES DE CAJICA ARCA", "p": "LUZ"}, {"c": "901786815", "n": "TRANSFORMADORA MUNDIAL SAS", "p": "BIO"}, {"c": "901621986", "n": "COOPERATIVA DE RECICLADORES Y TRANSFORMADORES AMBIENTALES", "p": "BIO"}, {"c": "1004252579", "n": "YENI PAOLA FERNANDEZ BERMEO", "p": "BIO"}, {"c": "901256859", "n": "ECO NADY S.A.S", "p": "BIO"}, {"c": "901842697", "n": "PLASTICOS Y AFINES BOGOTA S.A.S", "p": "BIO"}, {"c": "810003907", "n": "INDUSTRIAS LA VICTORIA S.A.S.", "p": "MAYERLIN"}, {"c": "901866611", "n": "ECO NADY 2 S.A.S", "p": "BIO"}, {"c": "900293868", "n": "VEOLIA ASEO SANTANDER Y CESAR S.A E.S.P", "p": "BIO"}, {"c": "901566161", "n": "COMERCIALIZADORA RECINORT SAS", "p": "BIO"}, {"c": "4269672", "n": "JOSE ISRAEL GUACHETA CUESTA", "p": "BIO"}, {"c": "901747674", "n": "ASOCIACIÓN DE RECICLADORES EQUILIBRIO AMBIENTAL", "p": "BIO"}, {"c": "901888691", "n": "POLIMEROS EL TRIUNFO SAS", "p": "BIO"}, {"c": "1013678963", "n": "DEISY MARCELA SUAREZ MORENO", "p": "BIO"}, {"c": "901545877", "n": "ASOCIACION DE RECICLADORES PENTARIOS CORAZON VERDE AMBIENTE TSUNAMI YO RECICLO", "p": "LUZ"}, {"c": "901884055", "n": "SOLUCIONES AMBIENTALES INTEGRALES S.A.S", "p": "BIO"}, {"c": "901490831", "n": "RECIAPROVECHABLES SAS", "p": "BIO"}, {"c": "901455706", "n": "ECOAMBIENTAL RECICLAJE SAS ESP", "p": "BIO"}, {"c": "830075712", "n": "SUMIPOR S.A.S", "p": "BIO"}, {"c": "901237000", "n": "ECOLOGISTICA DE LA COSTA SAS", "p": "BIO"}, {"c": "901336266", "n": "ECOGESTION PLUS SAS", "p": "BIO"}, {"c": "901797633", "n": "MUNDO BIOECOLOGICO S.A.S", "p": "BIO"}, {"c": "901871228", "n": "INTERNACIONAL DE PÓLIMEROS SAS", "p": "BIO"}, {"c": "901608039", "n": "ASOCIACION ASOAMBIENTAL", "p": "BIO"}, {"c": "901122122", "n": "TERRANUM DESARROLLO S.A.S", "p": "BIO"}, {"c": "901502657", "n": "COMERCIALIZADORA RECIPLAS LUCIANA SAS", "p": "BIO"}, {"c": "901867729", "n": "ASOCIACION DE RECICLADORES HORIZONTE VERDE", "p": "BIO"}, {"c": "901921958", "n": "SOLUCIONES PLÁSTICAS BOGOTÁ SAS", "p": "BIO"}, {"c": "901504680", "n": "ASOCIACION DE RECICLADORES COLOMBIA RECUPERA", "p": "LUZ"}, {"c": "901670916", "n": "RECICLADOS BARRANCA SAS ZESE", "p": "BIO"}, {"c": "1070017686", "n": "ANGIE PAOLA CASTRO CABALLERO", "p": "BIO"}, {"c": "900749690", "n": "MOTORED DE COLOMBIA S.A.S", "p": "BIO"}, {"c": "900373939", "n": "MICROLAB LABORATORIOS Y ASESORIAS S.A.S.", "p": "BIO"}, {"c": "901413938", "n": "ASOCIACION AMBIENTAL CICLO ALTERNATIVO", "p": "LUZ"}, {"c": "901929680", "n": "RECICLAJE AMBIENTAL JD S.A.S", "p": "BIO"}, {"c": "860532801", "n": "FUNDACIÓN SANAR NIÑOS CON CANCER", "p": "BIO"}, {"c": "11259317", "n": "EDUIN SAENZ MENDOZA", "p": "MAYERLIN"}, {"c": "900981246", "n": "EXIRECICLABLES MC S.A.S.", "p": "BIO"}, {"c": "900492692", "n": "CLICK ON GREEN S A S", "p": "BIO"}, {"c": "900744149", "n": "GESTION AMBIENTAL DE COLOMBIA SAS ESP", "p": "BIO"}, {"c": "890400246", "n": "INDUSTRIAS DE REFRIGERACION COMERCIAL S.A. INDUFRIAL S.A. \"REORGANIZACION EMPRESARIAL\"", "p": "BIO"}, {"c": "811033292", "n": "COOPERATIVA DE TRABAJADORES ASOCIADOS PRESTADORES DE SERVICIOS DE ASEO Y RECICLAJE COOTRAMA", "p": "BIO"}, {"c": "901593312", "n": "ASOCIACION DE RECUPERADORES LA LIDER DE TABIO", "p": "BIO"}, {"c": "901919023", "n": "RECYMUNDO S.A.S.", "p": "BIO"}, {"c": "901738652", "n": "ASOCIACION RECICLADORES ESPERANZA VERDE", "p": "BIO"}, {"c": "900942194", "n": "HICASA S A S", "p": "BIO"}, {"c": "901780879", "n": "ASOAMBIENTALES EL FARAÓN", "p": "MAYERLIN"}, {"c": "860031885", "n": "TEXTILES SWANTEX S.A", "p": "BIO"}, {"c": "901965392", "n": "CLENVOR S.A.S", "p": "BIO"}, {"c": "901558149", "n": "ASOCIACION DE RECUPERADORES AMBIENTALES DE LA ORINOQUIA", "p": "MAYERLIN"}, {"c": "901754715", "n": "RECICOLOMBIA SOSTENIBLE S.A.S", "p": "MAYERLIN"}, {"c": "1010214297", "n": "EDWIN ANDRES SURDIS MARTINEZ", "p": "MAYERLIN"}, {"c": "1073178156", "n": "CRISTHIAN MAURICIO PARRADO ORTIZ", "p": "LUZ"}, {"c": "901935189", "n": "ASOCIACIÓN DE RECICLAJE LA PROSPERIDAD JR", "p": "MAYERLIN"}, {"c": "800065396", "n": "INSTITUTO DE DIAGNOSTICO MEDICO S.A.", "p": "BIO"}, {"c": "901479981", "n": "INVERSIONES MUNDO VERDE SAS", "p": "BIO"}, {"c": "830037946", "n": "PANAMERICANA LIBRERIA Y PAPELERIA S.A", "p": "BIO"}, {"c": "1099211543", "n": "EFRAIN CARO ARIZA", "p": "MAYERLIN"}, {"c": "901391651", "n": "COOPERATIVA MULTIACTIVA PARA EL RECICLAJE Y LA CONSERVACION AMBIENTAL EMPRESA DE SERVICIOS PUBLICOS", "p": "BIO"}, {"c": "1015479042", "n": "CRISTIAN ANDRES MUÑOZ VARGAS", "p": "MAYERLIN"}, {"c": "901547325", "n": "ALTURA DISEÑO Y CONSTRUCCION SAS", "p": "BIO"}, {"c": "901956348", "n": "ASOCIACIÓN DE RECICLADORES ASOCIACIÓN RECICLEMOS O Y G", "p": "LUZ"}, {"c": "901695759", "n": "REPROPLANET S.A.S.", "p": "MAYERLIN"}, {"c": "900396867", "n": "MULREC S.A.S ESP", "p": "LUZ"}, {"c": "901595127", "n": "ASOCIACION ECO AMBIENTAL DE COLOMBIA", "p": "BIO"}, {"c": "901989029", "n": "COOPERATIVA DE DESARROLLO AMBIENTAL", "p": "BIO"}, {"c": "79863033", "n": "ROBERTO CARLOS FERNANDEZ VITOLA", "p": "BIO"}, {"c": "902001456", "n": "ASOCIACION DE RECICLADORES ASORECIRCULAR", "p": "BIO"}, {"c": "901074091", "n": "ASOC. ORA DE RECICLADORES NUEVA GENERACI", "p": "BIO"}, {"c": "1016019587", "n": "MIGUEL ANGEL RUIZ SAIZ", "p": "MAYERLIN"}, {"c": "901966478", "n": "COOPERATIVA AMBIENTAL DEL CARIBE COLOMBIANO", "p": "BIO"}, {"c": "901357946", "n": "ASOCIACION DE RECICLADORES CONSTRUYENDO CAMINOS", "p": "BIO"}, {"c": "901879218", "n": "ASOECOS S.A.S", "p": "MILENA"}, {"c": "900838513", "n": "AMODEVI", "p": "BIO"}, {"c": "901884941", "n": "ECORESIDUOS DE COLOMBIA SAS", "p": "LUZ"}, {"c": "901694633", "n": "ASOCIACION NACIONAL PROPLANETA", "p": "MILENA"}, {"c": "80826432", "n": "ERMILSO GONZALEZ MARTINEZ", "p": "MILENA"}, {"c": "830114018", "n": "GAIA VITARE S.A.S", "p": "LUZ"}, {"c": "901703386", "n": "ASOCIACIÓN DE RECICLADORES ECOVERDE", "p": "MILENA"}, {"c": "901512768", "n": "ZOJA INDUSTRIALES S.A.S.", "p": "MILENA"}, {"c": "1000809573", "n": "CRISTIAN MATEO PINILLOS LOPEZ", "p": "LUZ"}, {"c": "80799668", "n": "CARLOS HERNANDO GONZALEZ CHAPARRO", "p": "LUZ"}, {"c": "901398855", "n": "ECORECUPERADORA AMBIENTAL SAS", "p": "LUZ"}, {"c": "902023318", "n": "ORIGEN Y DESTINO CIRCULAR S.A.S", "p": "BIO"}, {"c": "901777591", "n": "ASOCIACION GREMIAL DE RECICLADORES PLANETA LIMPIO E.S.P", "p": "LUZ"}, {"c": "901914468", "n": "RECY-GREEN S.A.S", "p": "BIO"}, {"c": "1049641011", "n": "WILSON REINALDO RUIZ ROZO", "p": "BIO"}, {"c": "1051336189", "n": "MARTHA CECILIA PIÑEROS NUÑEZ", "p": "MILENA"}, {"c": "900542620", "n": "GRUPO CARLOS SANTAMARIA SAS", "p": "BIO"}, {"c": "79856601", "n": "CESAR FARID MURCIA CABREJO", "p": "BIO"}, {"c": "1109299879", "n": "MIGUEL ANGEL MUÑOZ REYES", "p": "MILENA"}, {"c": "900341290", "n": "ASOCIACION DE RECICLADORES DE MARIA PAZ", "p": "BIO"}, {"c": "902010935", "n": "CHATARRERIA LUNA UNO SAS", "p": "MAYERLIN"}, {"c": "901320719", "n": "ECOSISTEMAS & TECNOLOGIAS SAS", "p": "LUZ"}, {"c": "901466501", "n": "CYCLICA S.A.S", "p": "MAYERLIN"}, {"c": "1073160347", "n": "SANDRA MILENA LOPEZ CARRANZA", "p": "LUZ"}, {"c": "800017765", "n": "COLTEHILOS SAS", "p": "MAYERLIN"}, {"c": "1012406690", "n": "DARWIN GOMEZ RUIZ", "p": "LUZ"}, {"c": "900725269", "n": "ELE DE COLOMBIAS SAS", "p": "LUZ"}, {"c": "36383307", "n": "LUZ ADRIANA CUENCA VALENCIA", "p": "MAYERLIN"}, {"c": "16655613", "n": "CARLOS HUMBERTO MARTINEZ CASTRO", "p": "LUZ"}, {"c": "901862099", "n": "EMPRESA DISTRITAL DE APROVECHAMIENTO ESP SAS", "p": "LUZ"}, {"c": "830081427", "n": "TEKAMI S.A", "p": "BIO"}, {"c": "901307529", "n": "CAJAPLAST F-E S.A.S", "p": "LUZ"}, {"c": "901695686", "n": "METALES Y COMPLEMENTOS INDUSTRIALES DE SANTANDER S.A.S", "p": "BIO"}, {"c": "900955192", "n": "LAMPARAS CHANDELIER S.A.S", "p": "BIO"}, {"c": "900654185", "n": "ASOC. RECUP. AMBIENTALES UNIDOS KENNEDY", "p": "BIO"}, {"c": "20491130", "n": "ALEJANDRINA FORERO MAYORGA", "p": "LUZ"}, {"c": "900113247", "n": "ASOCIACION EMPRESARIAL DE FAMILIAS RECUPERADORAS AMBIENTALES COLOMBIANAS E.S.P.", "p": "BIO"}, {"c": "830081427", "n": "TAKAMI S.A", "p": "BIO"}, {"c": "901515701", "n": "ASOCIACION DE RECICLADORES EMMANUEL", "p": "BIO"}, {"c": "4906090", "n": "JOAQUIN EMILIO CUTIVA HORTA", "p": "LUZ"}, {"c": "900574684", "n": "SCRAPCOL SAS", "p": "LUZ"}, {"c": "901947114", "n": "COOPERATIVA PROTECTORA DE METALES R&C", "p": "BIO"}, {"c": "901051176", "n": "ASOCIACIÓN ASOPRORECICLAJE", "p": "LUZ"}, {"c": "902024886", "n": "SOLUCIONES & TRANSFORMADORA AMBIENTAL JM S.A.S", "p": "LUZ"}, {"c": "1115730644", "n": "NELLY ELIZABETH VELANDIA GALEANO", "p": "LUZ"}, {"c": "900168082", "n": "INVERSIONES PLAMATECH LTDA", "p": "BIO"}, {"c": "79800973", "n": "JOSE SEGUNDO SUAREZ FORERO", "p": "LUZ"}, {"c": "901809339", "n": "TRANSFORMASOSTENIBLE S.A.S", "p": "LUZ"}, {"c": "52552454", "n": "ANA LUCIA PACANCHIQUE BERNAL", "p": "MILENA"}, {"c": "901914468", "n": "RECY GREEN S.A.S", "p": "BIO"}, {"c": "901594653", "n": "PLASTICOS EL REFUGIO SAS", "p": "BIO"}, {"c": "901469870", "n": "ASOCIACIÓN DE RECICLADORES LISTOS A MEJORAR EL MEDIO AMBIENTE E.S.P.", "p": "BIO"}, {"c": "901902265", "n": "RECUPERADORA CICLO VERDE S.A.S", "p": "BIO"}, {"c": "901990280", "n": "PET ECOLOGICO DE COLOMBIA S.A.S", "p": "MAYERLIN"}, {"c": "901955700", "n": "BIOPLASTICOS RCD S.A.S", "p": "BIO"}, {"c": "902032997", "n": "SOMOS CIRKULAR S.A.S", "p": "LUZ"}, {"c": "901413536", "n": "ASOCIACION COLOMBIANA DE RECICLADORES HUELLA VERDE ESP", "p": "BIO"}, {"c": "1076220926", "n": "JUAN SEBASTIAN SANCHEZ NAVAS", "p": "LUZ"}, {"c": "830076176", "n": "CESER SERVICIO TECNICO ESPECIALIZADO SAS", "p": "BIO"}, {"c": "41225811", "n": "MARIA YAMILE GALLEGO SUAREZ", "p": "BIO"}, {"c": "39745374", "n": "GLORIA STELLA OCAMPO ORTIZ", "p": "LUZ"}, {"c": "902052670", "n": "RECUPERADORA AMBIENTAL MJ S.A.S", "p": "LUZ"}, {"c": "900251970", "n": "GEORGANICA S.A.S. E.S.P", "p": "MAYERLIN"}, {"c": "1030646129", "n": "AURA CATALINA JARAMILLO CUADROS", "p": "BIO"}, {"c": "900785234", "n": "ASOCIACION DE RECICLADORES DE OFICIO ARO AMBIENTALES", "p": "LUZ"}, {"c": "901310977", "n": "LATIN GREEN S.A.S. E.S.P", "p": "BIO"}, {"c": "900312827", "n": "ARCRECIFRONT", "p": "MAYERLIN"}, {"c": "901338362", "n": "ASODESA COLMENA E.S.P.", "p": "MILENA"}, {"c": "830060525", "n": "POLIEXPANDIDOS S.A.S.", "p": "BIO"}, {"c": "1025322571", "n": "JUAN SEBASTIAN MATIZ GUERRERO", "p": "LUZ"}, {"c": "901329753", "n": "ASOCIACION COLOMBIANA DE RESIDUOS APROVECHABLES ESP", "p": "LUZ"}, {"c": "1121842403", "n": "MARIA ANGELICA ROMERO NARANJO", "p": "LUZ"}, {"c": "901829350", "n": "ECORECUPERADORA SAN GABRIEL SAS", "p": "LUZ"}, {"c": "1012316995", "n": "JHIRED KATHERIN GOMEZ LEYTON", "p": "LUZ"}, {"c": "39671220", "n": "SANDRA MILENA FANDIÑO", "p": "MILENA"}, {"c": "901721576", "n": "ASOCIACIÓN DE RECUPERADORES AMBIENTALES RECIGREEN", "p": "BIO"}, {"c": "902066737", "n": "EKO FUTURO AMBIENTAL S.A.S.", "p": "BIO"}, {"c": "1016107062", "n": "ANDRES FELIPE GAMBOA SUAREZ", "p": "LUZ"}, {"c": "901547332", "n": "ECOLOGISTICA AMBIENTAL SAS", "p": "MAYERLIN"}, {"c": "900276163", "n": "DAME TU MANO", "p": "MILENA"}, {"c": "901610259", "n": "ASOCIACIÓN GREMIAL DE RECICLADORES AGRERECICOL E.S.P.", "p": "LUZ"}, {"c": "901818805", "n": "TROFICA LATAM S.A.S", "p": "LUZ"}, {"c": "1067608053", "n": "SABRINA DEL CARMEN CUELLO MARTINEZ", "p": "MILENA"}, {"c": "1016027103", "n": "SANDRA CAROLINA MOYA MORALES", "p": "LUZ"}, {"c": "901447886", "n": "CENTRAL DE METALES COLOMBIA S.A.S", "p": "BIO"}, {"c": "901791177", "n": "INDUSTRIAS PLASTICAS RAMIREZ SAS", "p": "LUZ"}, {"c": "901825246", "n": "ECOTRANSFORMANDO PLANETA S.A.S E.S.P.", "p": "MAYERLIN"}, {"c": "52023901", "n": "OLGA LUCIA ROMERO PERDOMO", "p": "LUZ"}, {"c": "800153696", "n": "AMBIENCIQ INGENIEROS S A S", "p": "BIO"}, {"c": "1072701632", "n": "YESSICA JOHANNA CHISCO PARRA", "p": "LUZ"}, {"c": "901126984", "n": "ASOCIACION DE RECICLADORES BOGOTA V", "p": "BIO"}, {"c": "901246447", "n": "RECICLADORA J & M S.A.S", "p": "LUZ"}, {"c": "79612728", "n": "GABRIEL ENMANUEL GOMEZ JIMENEZ", "p": "MILENA"}, {"c": "1193112649", "n": "YEIMMY ALEXANDRA TACUMA CULMA", "p": "BIO"}, {"c": "901371466", "n": "PLASTIKER SAS.", "p": "BIO"}, {"c": "1012425823", "n": "MARIA ALEJANDRA CIPAGAUTA GARZON", "p": "LUZ"}, {"c": "28272849", "n": "BEATRIZ ELENA VARGAS TRIANA", "p": "LUZ"}, {"c": "901975739", "n": "ECOCYCLE S SL S.A.S", "p": "BIO"}, {"c": "1015431804", "n": "CLAUDIA MAYERLI CIFUENTES MOLINA", "p": "BIO"}, {"c": "830101959", "n": "TRANSPORTES LOGISTICOS DE CARGA G M T S A S", "p": "BIO"}, {"c": "901766894", "n": "INVERSIONES ALO SAS", "p": "BIO"}, {"c": "900937138", "n": "TRANSPORTE Y LOGISTICA EL PORVENIR SAS", "p": "LUZ"}, {"c": "901228547", "n": "AGCER", "p": "BIO"}, {"c": "1013584680", "n": "ASLY ROJAS SANDOVAL", "p": "MAYERLIN"}, {"c": "900710817", "n": "ASOC. RECICLADORES ACTIVOS DE USAQUENESP", "p": "LUZ"}, {"c": "52489340", "n": "BEATRIZ EUGENIA ESCOBAR GUEVARA", "p": "LUZ"}, {"c": "902014827", "n": "RECICLAJE & SOSTENIBILIDAD S.A.S.", "p": "BIO"}, {"c": "52482955", "n": "DIANA MILENA VASQUEZ GARCIA", "p": "LUZ"}, {"c": "11307658", "n": "EDGAR ALFONSO JUDEX GUTIERREZ", "p": "LUZ"}, {"c": "93201176", "n": "VICTOR GUILLERMO PADILLA QUIÑONES", "p": "LUZ"}, {"c": "901604100", "n": "ASOCIACIÓN DE FACILITADORES AMBIENTALES ECOZEL", "p": "MILENA"}, {"c": "900917367", "n": "ASOCIACION DE RECUPERADORES DE COTA", "p": "LUZ"}, {"c": "901409637", "n": "ASOCIACION DE RECUPERADORES BIOUNIVERSO", "p": "MILENA"}, {"c": "800247030", "n": "HOTELES EL SALITRE SAS", "p": "BIO"}, {"c": "3241628", "n": "JAIRO ALBERTO GALVIS PEDRAZA", "p": "LUZ"}, {"c": "901452493", "n": "TINGUA E.S.P", "p": "MILENA"}, {"c": "901727961", "n": "ASOCIACION DE RECUPERADORES LLENITOS DE AMOR", "p": "LUZ"}, {"c": "860067604", "n": "CAJAS FUERTES ANCLA S.A.S", "p": "MILENA"}, {"c": "1000227121", "n": "JUAN PABLO PEÑA OSPINA", "p": "LUZ"}, {"c": "1014253029", "n": "YULI PAOLA GUERRERO CAPERA", "p": "LUZ"}, {"c": "901393460", "n": "BIO AMBAR S.A.S.", "p": "BIO"}, {"c": "901821647", "n": "COOPERATIVA MULTIMETALES EN ACCION", "p": "LUZ"}, {"c": "901664976", "n": "ATALAYA RECICLER SAS", "p": "BIO"}, {"c": "900589386", "n": "EKO RED S.A.S", "p": "BIO"}, {"c": "901840440", "n": "RECICLADORA ECO MUNDO SAS", "p": "MAYERLIN"}, {"c": "901770858", "n": "ASOCIACIÓN GREMIAL DE RECICLADORES VERDE RENUEVA E.S.P", "p": "LUZ"}, {"c": "80881922", "n": "HERNANDO CELIS VERA", "p": "LUZ"}, {"c": "901986232", "n": "TRANSFORMACIONES ECOLOGICAS SANTANA S.A.S", "p": "LUZ"}, {"c": "902009676", "n": "ASOCIACION DE RECICLADORES ECOCIRCULO", "p": "LUZ"}, {"c": "900429985", "n": "ECOPOSITIVA S.A.S", "p": "BIO"}, {"c": "901490832", "n": "AMBIENTAR RECYCLING SAS", "p": "MAYERLIN"}, {"c": "1000777133", "n": "BRAYAN CAMILO RENDON PEREZ", "p": "LUZ"}, {"c": "1108831988", "n": "CAMILO CAPERA PRADA", "p": "LUZ"}, {"c": "902071825", "n": "ECOCIRCULAR DE COLOMBIA S.A.S", "p": "LUZ"}, {"c": "901091236", "n": "COLOMBIA EMPRENDEDORES SAS", "p": "BIO"}, {"c": "900307145", "n": "HDL LOGISTICA S.A.S", "p": "LUZ"}, {"c": "901832736", "n": "GESTION ECOCAPITAL SAS E.S.P.", "p": "LUZ"}, {"c": "901127287", "n": "INVERSIONES LOGUZ S.A.S.", "p": "MAYERLIN"}, {"c": "901487876", "n": "CICLO VIVO S.A.S.", "p": "LUZ"}, {"c": "35492601", "n": "MARIA LUCILA JIMENEZ LASSO", "p": "BIO"}, {"c": "901807646", "n": "REDNATURA SAS", "p": "BIO"}, {"c": "1012368064", "n": "WILMER REYES", "p": "LUZ"}, {"c": "901509590", "n": "ECO MUNDOSOSTENIBLE SAS", "p": "LUZ"}];
+const PROMOTORAS = ['BIO','LUZ','MAYERLIN','MILENA'];
+const EST_SOL = ['Pendiente','Programada','En ruta','Cargada','Recibida en planta','Cancelada'];
+const EST_VEH = ['Disponible','En ruta a proveedor','Cargando','En ruta a planta','En planta / descargando','Mantenimiento','Inactivo'];
+const MATS_DEF = ['PET','PEAD / Soplado','Plástico película','Polipropileno','Cartón','Archivo','Plegadiza','Periódico','Chatarra','Aluminio','Vidrio','Tetrapak','Mixto','Otro'];
+const LS = 'biocirculo_prog_v2';
+const SYNC_URL = 'https://script.google.com/macros/s/AKfycbyKjRvOx75T3vaXxjpWz7tDl8BwvPxTZPAqCwZXWDd6Zi3-G9oTrk4iLDvDAQL6ReCrWA/exec';
+const TABLES = ['solicitudes','ubicaciones','inventario','vehiculos','config'];
+
+/* ================= ESTADO ================= */
+let S = load();
+function blank(){ return {solicitudes:[],ubicaciones:[],inventario:[],vehiculos:[],config:[{id:'cfg',metaDef:30000,metas:{},mats:MATS_DEF.join(', '),url:SYNC_URL,updatedAt:0}],queue:[]}; }
+function load(){ try{ const d=JSON.parse(localStorage.getItem(LS)); if(d&&d.solicitudes){ TABLES.forEach(t=>{if(!Array.isArray(d[t]))d[t]=[];}); if(!d.config.length)d.config=blank().config; if(!d.queue)d.queue=[]; return d;} }catch(e){} return blank(); }
+function save(){ try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){toast('No se pudo guardar localmente');} }
+const cfg=()=>{const c=S.config[0]||blank().config[0]; if(!c.url||!String(c.url).includes('/exec'))c.url=SYNC_URL; return c;};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function upsert(t,rec){ rec.updatedAt=Date.now(); const a=S[t]; const i=a.findIndex(x=>x.id===rec.id); if(i>=0)a[i]=rec; else a.push(rec); S.queue.push({t,id:rec.id}); save(); push(); render(); }
+
+/* ================= UTILIDADES ================= */
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const n0=v=>{const x=Number(v);return isFinite(x)?x:0;};
+const fk=v=>Math.round(n0(v)).toLocaleString('es-CO');
+const ft=v=>(n0(v)/1000).toLocaleString('es-CO',{minimumFractionDigits:1,maximumFractionDigits:1});
+const hoyISO=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10);};
+const hora=ts=>ts?new Date(Number(ts)).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}):'';
+const fechaHora=ts=>ts?new Date(Number(ts)).toLocaleString('es-CO',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2600);}
+function opts(sel,arr,first){ sel.innerHTML=(first!==undefined?`<option value="">${esc(first)}</option>`:'')+arr.map(a=>typeof a==='object'?`<option value="${esc(a.v)}">${esc(a.t)}</option>`:`<option>${esc(a)}</option>`).join(''); }
+const mats=()=>cfg().mats.split(',').map(s=>s.trim()).filter(Boolean);
+const fecha=()=>$('#gFecha').value||hoyISO();
+const metaDia=()=>{const m=cfg().metas||{};return n0(m[fecha()]!=null?m[fecha()]:cfg().metaDef);};
+const pClass=e=>'p-'+String(e).split(' ')[0];
+const eClass=e=>({'Disponible':'e-Disponible','En ruta a proveedor':'e-Ruta','Cargando':'e-Cargando','En ruta a planta':'e-Ruta','En planta / descargando':'e-Planta','Mantenimiento':'e-Mant','Inactivo':'e-Inactivo'})[e]||'';
+const CARGADO=['Cargada','Recibida en planta'];
+
+/* ================= FLOTA ================= */
+function flota(){ return FLOTA_BASE.map(b=>{const o=S.vehiculos.find(v=>v.id===b.id);return Object.assign({},b,o||{});}); }
+function vehById(id){ return flota().find(v=>v.id===id); }
+function ultimaUbic(id){ let u=null; S.ubicaciones.forEach(x=>{if(x.vehId===id&&(!u||n0(x.ts)>n0(u.ts)))u=x;}); return u; }
+function estadoVeh(v){ if(String(v.estado).toUpperCase()==='INACTIVO')return 'Inactivo'; const u=ultimaUbic(v.id); return u&&u.estado?u.estado:'Disponible'; }
+function vehLabel(v){ return `${v.placa} · ${v.tipo}${v.cap?' · '+fk(v.cap)+' kg':''}`; }
+
+/* ================= PROVEEDORES ================= */
+const provKey=p=>`${p.n} | ${p.c}`;
+function provsDe(promo){ return PROV_BASE.filter(p=>!promo||p.p===promo); }
+function findProv(txt){ txt=String(txt||'').trim(); return PROV_BASE.find(p=>provKey(p)===txt)||PROV_BASE.find(p=>p.c===txt)||PROV_BASE.find(p=>p.n.toUpperCase()===txt.toUpperCase()); }
+
+/* ================= ROLES ================= */
+const qs=new URLSearchParams(location.search);
+const ROL=(qs.get('rol')||'coordinador').toLowerCase();
+const ROL_NOM=(qs.get('nombre')||'').toUpperCase();
+const ROL_PLACA=(qs.get('placa')||'').toUpperCase();
+function aplicarRol(){
+  const show=ROL==='promotora'?['sol']:ROL==='conductor'?['cond']:null;
+  if(show){ $$('#nav button').forEach(b=>{ if(!show.includes(b.dataset.s))b.style.display='none'; }); go(show[0]); }
+  $('#rolTag').textContent=ROL==='promotora'?'Promotora: '+(ROL_NOM||'—'):ROL==='conductor'?'Conductor: '+ROL_PLACA:'Coordinación de transporte';
+}
+
+/* ================= NAVEGACION ================= */
+let cur='panel';
+function go(s){ cur=s; $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.s===s)); $$('.sec').forEach(x=>x.classList.toggle('on',x.id==='s-'+s)); render(); if(s==='flota')setTimeout(mapaRender,60); }
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.s);});
+
+/* ================= DATOS DEL DIA ================= */
+function solDia(promo){ return S.solicitudes.filter(s=>s.fecha===fecha()&&(!promo||s.promotora===promo)); }
+const kgCarg=s=>n0(s.kgBascula)||n0(s.kgReal);
+
+/* ================= PANEL ================= */
+function renderPanel(){
+  const promo=$('#pPromo').value;
+  const L=solDia(promo).filter(s=>s.estado!=='Cancelada');
+  const carg=L.filter(s=>CARGADO.includes(s.estado));
+  const pend=L.filter(s=>!CARGADO.includes(s.estado));
+  const kgC=carg.reduce((a,s)=>a+kgCarg(s),0);
+  const kgPend=pend.reduce((a,s)=>a+n0(s.kgEst),0);
+  const kgSol=L.reduce((a,s)=>a+n0(s.kgEst),0);
+  const meta=promo?0:metaDia();
+  const falta=Math.max(0,(meta||kgSol)-kgC);
+  const fl=flota(); const ests=fl.map(estadoVeh);
+  const disp=ests.filter(e=>e==='Disponible').length, oper=ests.filter(e=>!['Disponible','Mantenimiento','Inactivo'].includes(e)).length, fuera=ests.filter(e=>['Mantenimiento','Inactivo'].includes(e)).length;
+  const sinProg=L.filter(s=>s.estado==='Pendiente').length; const urgentes=L.filter(s=>s.estado==='Pendiente'&&s.prioridad==='Urgente').length; const kgProg=L.filter(s=>s.vehId&&!['Cancelada','Recibida en planta'].includes(s.estado)).reduce((a,s)=>a+n0(s.kgEst),0); const recib=L.filter(s=>s.estado==='Recibida en planta'); const kgRec=recib.reduce((a,s)=>a+kgCarg(s),0); const visitados=new Set(carg.map(s=>s.provCod)).size; const provPend=new Set(pend.map(s=>s.provCod)).size;
+  $('#kpis').innerHTML=[
+    ['Meta del día',ft(meta)+' t',fk(meta)+' kg','b'],
+    ['Toneladas solicitadas',ft(kgSol)+' t',L.length+' solicitudes','b'],
+    ['Toneladas programadas',ft(kgProg)+' t','con vehículo asignado',''],
+    ['Toneladas cargadas',ft(kgC)+' t',fk(kgC)+' kg',''],
+    ['Toneladas recibidas',ft(kgRec)+' t',recib.length+' ingresos a planta',''],
+    ['Toneladas pendientes',ft(falta)+' t',meta?'frente a meta':'frente a solicitado','a'],
+    ['Proveedores visitados',visitados,'cargados o recibidos',''],
+    ['Proveedores pendientes',provPend,pend.length+' solicitudes abiertas','a'],
+    ['Vehículos disponibles',disp,'listos para asignar',''],
+    ['Vehículos ocupados',oper,'en operación','b'],
+    ['Mantenimiento / inactivos',fuera,'fuera de servicio',fuera?'r':''],
+    ['Urgentes sin vehículo',urgentes,'requieren asignación inmediata',urgentes?'r':'']
+  ].map(k=>`<div class="card kpi ${k[3]}"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="s">${esc(k[2])}</div></div>`).join('');
+  const base=meta||kgSol; const pct=base?Math.min(100,kgC/base*100):0;
+  $('#avBar').style.width=pct.toFixed(1)+'%';
+  $('#avTxt').textContent=`${pct.toFixed(1)}% · ${ft(kgC)} t de ${ft(base)} t ${meta?'(meta)':'(solicitado)'}`;
+  $('#pAct').textContent='Actualizado: '+new Date().toLocaleTimeString('es-CO');
+  // promotoras
+  const rows=PROMOTORAS.filter(p=>!promo||p===promo).map(p=>{const X=solDia(p).filter(s=>s.estado!=='Cancelada');const c=X.filter(s=>CARGADO.includes(s.estado));const kc=c.reduce((a,s)=>a+kgCarg(s),0);const ks=X.reduce((a,s)=>a+n0(s.kgEst),0);return `<tr><td><b>${p}</b></td><td class="num">${X.length}</td><td class="num">${c.length}</td><td class="num">${X.length-c.length}</td><td class="num">${fk(ks)}</td><td class="num">${fk(kc)}</td><td style="width:110px"><div class="bar" style="height:10px"><div style="width:${ks?Math.min(100,kc/ks*100):0}%"></div></div></td></tr>`;});
+  $('#tPromo').innerHTML='<tr><th>Promotora</th><th class="num">Solic.</th><th class="num">Cargadas</th><th class="num">Faltan</th><th class="num">Kg solic.</th><th class="num">Kg carg.</th><th>Avance</th></tr>'+rows.join('');
+  // ocupacion
+  const occ=fl.filter(v=>v.cap||L.some(s=>s.vehId===v.id)).map(v=>{const X=L.filter(s=>s.vehId===v.id);const kg=X.reduce((a,s)=>a+(CARGADO.includes(s.estado)?kgCarg(s):n0(s.kgEst)),0);return {v,kg,n:X.length};}).filter(o=>o.n).sort((a,b)=>b.kg-a.kg);
+  $('#ocup').innerHTML=occ.length?occ.map(o=>{const p=o.v.cap?o.kg/o.v.cap*100:0;return `<div class="hbar"><span class="n" title="${esc(o.v.cond)}">${o.v.placa}</span><span class="t"><div class="${p>100?'o':''}" style="width:${Math.min(100,p)}%"></div></span><span class="val">${fk(o.kg)}/${o.v.cap?fk(o.v.cap):'?'} kg · ${o.n}</span></div>`;}).join(''):'<p class="muted">Sin vehículos asignados para esta fecha.</p>';
+  // proveedores
+  const pc={},pp={}; L.forEach(s=>{(CARGADO.includes(s.estado)?pc:pp)[s.provNom]=(s.promotora);});
+  Object.keys(pc).forEach(k=>{ if(pp[k]) delete pc[k]; });
+  $('#chCarg').innerHTML=Object.keys(pc).sort().map(k=>`<span class="chip">${esc(k)}</span>`).join('')||'<span class="muted">Aún no hay cargues.</span>';
+  $('#chPend').innerHTML=Object.keys(pp).sort().map(k=>`<span class="chip x">${esc(k)} <b>(${esc(pp[k])})</b></span>`).join('')||'<span class="muted">Sin pendientes 🎉</span>';
+  $('#nCarg').textContent='('+Object.keys(pc).length+')'; $('#nPend').textContent='('+Object.keys(pp).length+')';
+  // materiales
+  const m={}; L.forEach(s=>{m[s.material]=m[s.material]||{s:0,c:0};m[s.material].s+=n0(s.kgEst);if(CARGADO.includes(s.estado))m[s.material].c+=kgCarg(s);});
+  const mx=Math.max(1,...Object.values(m).map(x=>Math.max(x.s,x.c)));
+  $('#pMat').innerHTML=Object.keys(m).length?Object.entries(m).sort((a,b)=>b[1].s-a[1].s).map(([k,x])=>`<div class="hbar"><span class="n">${esc(k)}</span><span class="t"><div style="width:${x.c/mx*100}%"></div></span><span class="val">${fk(x.c)} / ${fk(x.s)} kg</span></div>`).join(''):'<p class="muted">Sin solicitudes.</p>';
+  const ce={}; ests.forEach(e=>ce[e]=(ce[e]||0)+1);
+  $('#pFlota').innerHTML=EST_VEH.map(e=>`<div class="hbar"><span class="n">${e}</span><span class="t"><div style="width:${(ce[e]||0)/fl.length*100}%"></div></span><span class="val">${ce[e]||0} veh.</span></div>`).join('');
+}
+
+/* ================= SOLICITUDES ================= */
+function prepSolForm(){
+  const sp=$('#solPromo'); const prev=sp.value;
+  opts(sp,PROMOTORAS); if(ROL==='promotora'&&ROL_NOM){sp.value=ROL_NOM;sp.disabled=true;} else if(prev)sp.value=prev;
+  fillProvList(); const sm=$('#solMat'); const pm=sm.value; opts(sm,mats()); if(pm)sm.value=pm;
+  const f=$('#fSol'); if(!f.fecha.value)f.fecha.value=fecha();
+}
+function fillProvList(){ $('#dlProv').innerHTML=provsDe($('#solPromo').value).map(p=>`<option value="${esc(provKey(p))}">`).join(''); }
+$('#solPromo').addEventListener('change',fillProvList);
+$('#fSol').addEventListener('submit',e=>{
+  e.preventDefault(); const f=e.target; const p=findProv(f.prov.value);
+  if(!p){ $('#solMsg').textContent='⚠ Seleccione un proveedor de la lista.'; return; }
+  const kg=n0(f.kgEst.value); if(kg<=0){ $('#solMsg').textContent='⚠ Kg estimados debe ser mayor a 0.'; return; }
+  const promo=$('#solPromo').value||p.p;
+  upsert('solicitudes',{id:uid(),fecha:f.fecha.value,promotora:promo,provCod:p.c,provNom:p.n,material:f.material.value,kgEst:kg,pacas:n0(f.pacas.value),zona:f.zona.value.trim(),dir:f.dir.value.trim(),contacto:'',franja:f.franja.value,prioridad:f.prioridad.value,tipoReq:f.tipoReq.value,obs:f.obs.value.trim(),estado:'Pendiente',vehId:'',placa:'',horaProg:'',kgReal:0,kgBascula:0,creado:Date.now()});
+  const fe=f.fecha.value; f.reset(); f.fecha.value=fe; prepSolForm(); $('#solMsg').textContent='✔ Solicitud enviada '+new Date().toLocaleTimeString('es-CO'); toast('Solicitud registrada');
+});
+function solFiltradas(){
+  const pr=ROL==='promotora'?ROL_NOM:$('#lsPromo').value, es=$('#lsEst').value, q=$('#lsQ').value.trim().toUpperCase();
+  return S.solicitudes.filter(s=>s.fecha===fecha()&&(!pr||s.promotora===pr)&&(!es||s.estado===es)&&(!q||(s.provNom+' '+s.zona+' '+s.provCod+' '+s.placa).toUpperCase().includes(q))).sort((a,b)=>a.creado-b.creado);
+}
+function renderSol(){
+  const L=solFiltradas(); const coord=ROL!=='promotora';
+  $('#tSol').innerHTML='<tr><th>Hora</th><th>Promotora</th><th>Proveedor</th><th>Material</th><th class="num">Kg est.</th><th>Zona / dirección</th><th>Hora disponible</th><th>Prioridad</th><th>Estado</th><th>Vehículo</th><th class="num">Kg cargado</th><th></th></tr>'+
+  (L.map(s=>`<tr><td>${hora(s.creado)}</td><td>${esc(s.promotora)}</td><td><b>${esc(s.provNom)}</b><div class="muted">${esc(s.provCod)}</div></td><td>${esc(s.material)}</td><td class="num">${fk(s.kgEst)}</td><td>${esc(s.zona)}<div class="muted">${esc(s.dir)}</div></td><td><b>${esc(s.franja||'--:--')}</b></td><td>${esc(s.prioridad)}</td><td><span class="pill ${pClass(s.estado)}">${esc(s.estado)}</span></td><td>${esc(s.placa)} ${s.horaProg?'<div class="muted">'+esc(s.horaProg)+'</div>':''}</td><td class="num">${kgCarg(s)?fk(kgCarg(s)):''}</td><td>${s.estado==='Pendiente'||coord?`<button class="btn sm sec2" type="button" data-ed="${s.id}">Editar</button>`:''}</td></tr>`).join('')||'<tr><td colspan="12" class="muted">No hay solicitudes para esta fecha.</td></tr>');
+}
+['#lsPromo','#lsEst','#lsQ'].forEach(id=>$(id).addEventListener('input',renderSol));
+$('#tSol').addEventListener('click',e=>{const b=e.target.closest('[data-ed]');if(b)editSol(b.dataset.ed);});
+function editSol(id){
+  const s=S.solicitudes.find(x=>x.id===id); if(!s)return; const coord=ROL!=='promotora';
+  modal(`<h3>Editar solicitud · ${esc(s.provNom)}</h3><form class="f" id="fEd">
+   <label>Fecha<input type="date" name="fecha" value="${esc(s.fecha)}"></label>
+   <label>Material<select name="material">${mats().map(m=>`<option ${m===s.material?'selected':''}>${esc(m)}</option>`).join('')}</select></label>
+   <label>Kg estimados<input type="number" name="kgEst" value="${n0(s.kgEst)}" min="1"></label>
+   <label>Prioridad<select name="prioridad">${['Normal','Alta','Urgente'].map(m=>`<option ${m===s.prioridad?'selected':''}>${m}</option>`).join('')}</select></label>
+   <label>Zona<input name="zona" value="${esc(s.zona)}"></label><label>Dirección<input name="dir" value="${esc(s.dir)}"></label><label>Hora disponible<input type="time" name="franja" step="1800" value="${esc(s.franja||'')}"></label>
+   ${coord?`<label>Estado<select name="estado">${EST_SOL.map(m=>`<option ${m===s.estado?'selected':''}>${m}</option>`).join('')}</select></label>`:''}
+   <label style="grid-column:1/-1">Observaciones<textarea name="obs">${esc(s.obs)}</textarea></label>
+   <div class="row"><button class="btn" type="submit">Guardar</button><button class="btn r" type="button" id="edCan">Cancelar solicitud</button><button class="btn sec2" type="button" data-close>Cerrar</button></div></form>`);
+  $('#fEd').addEventListener('submit',ev=>{ev.preventDefault();const f=ev.target;const r=Object.assign({},s,{fecha:f.fecha.value,material:f.material.value,kgEst:Math.max(1,n0(f.kgEst.value)),prioridad:f.prioridad.value,zona:f.zona.value,dir:f.dir.value,franja:f.franja.value,obs:f.obs.value});if(f.estado)r.estado=f.estado.value;upsert('solicitudes',r);closeModal();toast('Solicitud actualizada');});
+  $('#edCan').addEventListener('click',()=>{if(confirm('¿Cancelar esta solicitud?')){upsert('solicitudes',Object.assign({},s,{estado:'Cancelada'}));closeModal();}});
+}
+$('#btnCsvSol').addEventListener('click',()=>{
+  const L=solFiltradas(); const H=['fecha','promotora','provCod','provNom','material','kgEst','pacas','zona','dir','franja','prioridad','estado','placa','horaProg','kgReal','kgBascula','obs'];
+  const csv='\ufeff'+H.join(';')+'\n'+L.map(s=>H.map(h=>'"'+String(s[h]==null?'':s[h]).replace(/"/g,'""')+'"').join(';')).join('\n');
+  descargar(csv,'solicitudes_'+fecha()+'.csv','text/csv');
+});
+
+/* ================= PROGRAMACION ================= */
+function vehDisponiblesProg(){ return flota().filter(v=>!['Mantenimiento','Inactivo'].includes(estadoVeh(v))); }
+function cargaVeh(id){ return solDia().filter(s=>s.vehId===id&&s.estado!=='Cancelada'&&s.estado!=='Recibida en planta').reduce((a,s)=>a+n0(s.kgEst),0); }
+function renderProg(){
+  const P=solDia().filter(s=>s.estado==='Pendiente').sort((a,b)=>prio(b)-prio(a));
+  const V=vehDisponiblesProg();
+  $('#nPorProg').textContent='('+P.length+')';
+  $('#tPorProg').innerHTML='<tr><th>Proveedor</th><th class="num">Kg</th><th>Zona</th><th>Asignar vehículo</th><th>Hora</th><th></th></tr>'+(P.map(s=>`<tr style="background:${s.prioridad==='Urgente'?'#ffebee':'#fff'}"><td><span class="sem ${s.prioridad==='Urgente'?'rojo':'amarillo'}"><i></i>${s.prioridad==='Urgente'?'URGENTE SIN VEHÍCULO':'PENDIENTE'}</span><br><b>${esc(s.provNom)}</b><div class="muted">${esc(s.promotora)} · ${esc(s.material)} · disponible ${esc(s.franja||'--:--')} ${s.tipoReq?'· pide '+esc(s.tipoReq):''}</div></td><td class="num">${fk(s.kgEst)}</td><td>${esc(s.zona)}<div class="muted">${esc(s.franja)}</div></td><td><select data-v="${s.id}" style="max-width:210px"><option value="">— Seleccione —</option>${V.map(v=>{const lib=v.cap?v.cap-cargaVeh(v.id):null;return `<option value="${v.id}">${esc(v.placa)} · ${esc(v.tipo)} · ${lib==null?'cap. ?':'libre '+fk(lib)+' kg'}</option>`;}).join('')}</select></td><td><input type="time" data-h="${s.id}" style="width:100px"></td><td><button class="btn sm" type="button" data-asig="${s.id}">Asignar</button></td></tr>`).join('')||'<tr><td colspan="6" class="muted">No hay solicitudes pendientes por programar 👍</td></tr>');
+  const D=solDia().filter(s=>s.vehId&&s.estado!=='Cancelada');
+  const vs=flota().filter(v=>D.some(s=>s.vehId===v.id));
+  $('#progVeh').innerHTML=vs.length?vs.map(v=>{const X=D.filter(s=>s.vehId===v.id).sort((a,b)=>String(a.horaProg).localeCompare(String(b.horaProg)));const kg=X.reduce((a,s)=>a+n0(s.kgEst),0);const p=v.cap?kg/v.cap*100:0;return `<div class="card" style="margin-bottom:8px;padding:10px"><div class="row" style="justify-content:space-between"><b>🚚 ${esc(v.placa)} · ${esc(v.tipo)} <span class="sem verde"><i></i>PROGRAMADO</span></b><span class="pill ${eClass(estadoVeh(v))}">${esc(estadoVeh(v))}</span></div><div class="muted">${esc(v.cond)}${v.aux?' · Aux: '+esc(v.aux):''}</div><div class="hbar"><span class="t"><div class="${p>100?'o':''}" style="width:${Math.min(100,p)}%"></div></span><span class="val">${fk(kg)} / ${v.cap?fk(v.cap):'?'} kg</span></div><table>${X.map(s=>`<tr><td style="width:55px">${esc(s.horaProg||'--:--')}</td><td>${esc(s.provNom)}<div class="muted">${esc(s.zona)} · ${esc(s.material)}</div></td><td class="num">${fk(s.kgEst)}</td><td><span class="pill ${pClass(s.estado)}">${esc(s.estado)}</span></td><td>${s.estado==='Programada'?`<button class="btn sm sec2" type="button" data-des="${s.id}" title="Quitar asignación">✕</button>`:''}</td></tr>`).join('')}</table></div>`;}).join(''):'<p class="muted">Aún no hay vehículos programados para esta fecha.</p>';
+}
+const prio=s=>({'Urgente':3,'Alta':2,'Normal':1})[s.prioridad]||1;
+$('#tPorProg').addEventListener('click',e=>{const b=e.target.closest('[data-asig]');if(!b)return;const id=b.dataset.asig;const vid=$(`[data-v="${id}"]`).value;if(!vid){toast('Seleccione un vehículo');return;}asignar(id,vid,$(`[data-h="${id}"]`).value);});
+$('#progVeh').addEventListener('click',e=>{const b=e.target.closest('[data-des]');if(!b)return;const s=S.solicitudes.find(x=>x.id===b.dataset.des);upsert('solicitudes',Object.assign({},s,{estado:'Pendiente',vehId:'',placa:'',horaProg:''}));});
+function asignar(id,vid,h){ const s=S.solicitudes.find(x=>x.id===id),v=vehById(vid); if(!s||!v)return; if(v.cap&&cargaVeh(vid)+n0(s.kgEst)>v.cap){toast(`Asignación bloqueada: ${v.placa} superaría ${fk(v.cap)} kg`);return;} upsert('solicitudes',Object.assign({},s,{estado:'Programada',vehId:vid,placa:v.placa,horaProg:h||''})); toast('Asignado a '+v.placa); }
+$('#btnAuto').addEventListener('click',()=>{
+  const P=solDia().filter(s=>s.estado==='Pendiente').sort((a,b)=>prio(b)-prio(a)||n0(b.kgEst)-n0(a.kgEst));
+  const V=vehDisponiblesProg().filter(v=>v.cap>0); if(!P.length){toast('No hay pendientes');return;}
+  const libre={}; V.forEach(v=>libre[v.id]=v.cap-cargaVeh(v.id)); let ok=0,no=0; const horaBase={};
+  P.forEach(s=>{
+    let cand=V.filter(v=>libre[v.id]>=n0(s.kgEst)&&(!s.tipoReq||v.tipo===s.tipoReq));
+    if(!cand.length)cand=V.filter(v=>libre[v.id]>=n0(s.kgEst));
+    // preferir vehiculo que ya va a la misma zona, luego el de menor capacidad libre suficiente
+    const mismaZona=cand.filter(v=>s.zona&&solDia().some(x=>x.vehId===v.id&&x.zona&&x.zona.toUpperCase()===s.zona.toUpperCase()));
+    const pool=mismaZona.length?mismaZona:cand; pool.sort((a,b)=>libre[a.id]-libre[b.id]);
+    const v=pool[0]; if(!v){no++;return;}
+    libre[v.id]-=n0(s.kgEst); horaBase[v.id]=(horaBase[v.id]||0)+1;
+    const base=(s.franja&&/^\d{2}:\d{2}$/.test(s.franja))?s.franja:'06:00'; const bm=Number(base.slice(0,2))*60+Number(base.slice(3)); const mins=Math.min(17*60,bm+(horaBase[v.id]-1)*90); const h=String(Math.floor(mins/60)).padStart(2,'0')+':'+String(mins%60).padStart(2,'0');
+    s.estado='Programada';s.vehId=v.id;s.placa=v.placa;s.horaProg=s.horaProg||h;s.updatedAt=Date.now();S.queue.push({t:'solicitudes',id:s.id});ok++;
+  });
+  save();push();render(); toast(`Programadas ${ok}${no?' · '+no+' sin cupo de capacidad':''}`);
+});
+function textoProg(){ const D=solDia().filter(s=>s.vehId&&s.estado!=='Cancelada'); const vs=flota().filter(v=>D.some(s=>s.vehId===v.id));
+  return `*PROGRAMACIÓN BIOCÍRCULO ${fecha()}*\n\n`+vs.map(v=>`🚚 *${v.placa}* (${v.tipo}) - ${v.cond}\n`+D.filter(s=>s.vehId===v.id).sort((a,b)=>String(a.horaProg).localeCompare(String(b.horaProg))).map(s=>`  • ${s.horaProg||'--:--'} ${s.provNom} - ${s.zona||''} ${s.dir||''} - ${s.material} ${fk(s.kgEst)} kg`).join('\n')).join('\n\n'); }
+$('#btnWa').addEventListener('click',()=>{const t=textoProg();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Programación copiada')).catch(()=>modal(`<h3>Copiar programación</h3><textarea style="width:100%;height:300px">${esc(t)}</textarea><button class="btn" type="button" data-close>Cerrar</button>`));});
+$('#btnPrint').addEventListener('click',()=>window.print());
+
+/* ================= FLOTA ================= */
+let MAP=null, LAYER=null;
+function mapaRender(){
+  if(typeof L==='undefined'){ $('#mapaMsg').textContent='El mapa requiere conexión a internet. Las ubicaciones se ven en la tabla.'; return; }
+  if(!MAP){ MAP=L.map('mapa').setView([4.65,-74.1],11); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(MAP); LAYER=L.layerGroup().addTo(MAP); }
+  MAP.invalidateSize(); LAYER.clearLayers(); const pts=[];
+  flota().forEach(v=>{const u=ultimaUbic(v.id); if(u&&u.lat&&u.lng){pts.push([u.lat,u.lng]); L.circleMarker([u.lat,u.lng],{radius:9,color:'#1b5e20',fillColor:estadoVeh(v)==='Disponible'?'#43a047':'#6a1b9a',fillOpacity:.9}).bindPopup(`<b>${esc(v.placa)}</b><br>${esc(v.cond)}<br>${esc(u.estado)}<br>${esc(u.ubic||'')}<br>${fechaHora(u.ts)}`).addTo(LAYER);} });
+  if(pts.length)MAP.fitBounds(pts,{padding:[30,30],maxZoom:14});
+  $('#mapaMsg').textContent=pts.length?pts.length+' vehículo(s) con GPS reportado.':'Aún no hay ubicaciones GPS. Los conductores pueden reportar desde su vista (📱).';
+}
+function renderFlota(){
+  const fl=flota(); const tipos=[...new Set(fl.map(v=>v.tipo))];
+  if($('#fTipo').options.length<=1)tipos.forEach(t=>$('#fTipo').add(new Option(t,t)));
+  if($('#fEst').options.length<=1)EST_VEH.forEach(t=>$('#fEst').add(new Option(t,t)));
+  const t=$('#fTipo').value,e=$('#fEst').value,q=$('#fQ').value.trim().toUpperCase();
+  const ce={}; fl.forEach(v=>{const k=v.tipo+'|'+estadoVeh(v);ce[k]=(ce[k]||0)+1;});
+  $('#fRes').innerHTML='<table><tr><th>Tipo</th>'+EST_VEH.map(x=>`<th class="num" style="font-size:11px">${x}</th>`).join('')+'<th class="num">Total</th></tr>'+tipos.map(tp=>`<tr><td><b>${esc(tp)}</b></td>${EST_VEH.map(x=>`<td class="num">${ce[tp+'|'+x]||''}</td>`).join('')}<td class="num"><b>${fl.filter(v=>v.tipo===tp).length}</b></td></tr>`).join('')+'</table>';
+  const U=[...S.ubicaciones].sort((a,b)=>b.ts-a.ts).slice(0,40);
+  $('#tUbic').innerHTML='<tr><th>Último reporte</th><th>Placa</th><th>Estado</th><th>Ubicación</th><th>Tiempo desde reporte</th></tr>'+(U.map(u=>`<tr><td>${fechaHora(u.ts)}</td><td>${esc((vehById(u.vehId)||{}).placa)}</td><td><span class="pill ${eClass(u.estado)}">${esc(u.estado)}</span></td><td>${esc(u.ubic)} ${u.lat?`<a target="_blank" rel="noopener" href="https://maps.google.com/?q=${u.lat},${u.lng}">📍</a>`:''}</td><td>${Math.max(0,Math.floor((Date.now()-n0(u.ts))/60000))} min</td></tr>`).join('')||'<tr><td colspan="5" class="muted">Sin reportes.</td></tr>');
+  $('#vGrid').innerHTML=fl.filter(v=>(!t||v.tipo===t)&&(!e||estadoVeh(v)===e)&&(!q||(v.placa+' '+v.cond+' '+v.transp).toUpperCase().includes(q))).map(v=>{
+    const es=estadoVeh(v),u=ultimaUbic(v.id),X=solDia().filter(s=>s.vehId===v.id&&s.estado!=='Cancelada'),kg=X.reduce((a,s)=>a+n0(s.kgEst),0);
+    const col={'Disponible':'#43a047','Mantenimiento':'#c62828','Inactivo':'#90a4ae'}[es]||'#6a1b9a';
+    return `<div class="veh" style="border-left-color:${col}"><div class="row" style="justify-content:space-between"><span class="pl">${esc(v.placa)}</span><span class="pill ${eClass(es)}">${esc(es)}</span></div>
+    <div class="mini">${esc(v.tipo)} · Cap. ${v.cap?fk(v.cap)+' kg':'sin dato'} ${v.pacas?'· '+esc(v.pacas)+' pacas':''}</div>
+    <div class="mini">👤 ${esc(v.cond)}${v.aux?'<br>👥 Aux: '+esc(v.aux):''}</div>
+    <div class="mini">📍 ${u?esc(u.ubic||'GPS')+' · '+fechaHora(u.ts):'Sin reporte'} ${u&&u.lat?`<a target="_blank" rel="noopener" href="https://maps.google.com/?q=${u.lat},${u.lng}">ver</a>`:''}</div>
+    <div class="mini">Hoy: ${X.length} servicio(s) · ${fk(kg)} kg asignados</div>
+    <div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-ub="${v.id}">Actualizar estado</button></div></div>`;}).join('')||'<p class="muted">Sin vehículos con esos filtros.</p>';
+}
+['#fTipo','#fEst','#fQ'].forEach(id=>$(id).addEventListener('input',renderFlota));
+$('#vGrid').addEventListener('click',e=>{const b=e.target.closest('[data-ub]');if(b)modalUbic(b.dataset.ub);});
+function modalUbic(vid){
+  const v=vehById(vid),u=ultimaUbic(vid)||{};
+  modal(`<h3>Actualizar ${esc(v.placa)}</h3><form class="f" id="fUb">
+   <label>Estado<select name="estado">${EST_VEH.map(x=>`<option ${x===estadoVeh(v)?'selected':''}>${x}</option>`).join('')}</select></label>
+   <label>Ubicación / referencia<input name="ubic" value="${esc(u.ubic||'')}" placeholder="Ej: Proveedor X, Calle 80"></label>
+   <label>Latitud<input name="lat" value="${u.lat||''}"></label><label>Longitud<input name="lng" value="${u.lng||''}"></label>
+   <div class="row" style="grid-column:1/-1"><button class="btn b" type="button" id="gps">📡 Usar mi GPS</button><span class="muted" id="gpsMsg"></span></div>
+   <div class="row"><button class="btn" type="submit">Guardar</button><button class="btn sec2" type="button" data-close>Cerrar</button></div></form>`);
+  $('#gps').addEventListener('click',()=>gps($('#fUb'),$('#gpsMsg')));
+  $('#fUb').addEventListener('submit',ev=>{ev.preventDefault();const f=ev.target;regUbic(vid,f.estado.value,f.ubic.value,f.lat.value,f.lng.value);closeModal();toast('Estado actualizado');});
+}
+function gps(f,msg){ if(!navigator.geolocation){msg.textContent='GPS no disponible en este navegador.';return;} msg.textContent='Obteniendo ubicación…';
+  navigator.geolocation.getCurrentPosition(p=>{f.lat.value=p.coords.latitude.toFixed(6);f.lng.value=p.coords.longitude.toFixed(6);msg.textContent='✔ Ubicación capturada (±'+Math.round(p.coords.accuracy)+' m)';},er=>{msg.textContent='No se pudo obtener GPS: '+er.message+' (abra el enlace por https y permita ubicación).';},{enableHighAccuracy:true,timeout:15000}); }
+function regUbic(vid,estado,ubic,lat,lng){ const la=parseFloat(lat),ln=parseFloat(lng); upsert('ubicaciones',{id:uid(),vehId:vid,placa:(vehById(vid)||{}).placa,estado,ubic:String(ubic||'').trim(),lat:isFinite(la)&&Math.abs(la)<=90?la:'',lng:isFinite(ln)&&Math.abs(ln)<=180?ln:'',ts:Date.now(),fecha:hoyISO()}); }
+
+/* ================= CARGUE ================= */
+function renderCargue(){
+  const es=$('#cgEst').value;
+  const L=solDia().filter(s=>s.vehId&&(es==='act'?['Programada','En ruta','Cargada'].includes(s.estado):(!es||s.estado===es))).sort((a,b)=>String(a.placa+a.horaProg).localeCompare(String(b.placa+b.horaProg)));
+  $('#tCargue').innerHTML='<tr><th>Vehículo</th><th>Hora</th><th>Proveedor</th><th>Material</th><th class="num">Kg est.</th><th>Estado</th><th>Kg cargado (campo)</th><th>Kg báscula (planta)</th><th class="num">Dif. vs est.</th><th>Acción</th></tr>'+(L.map(s=>{const d=kgCarg(s)?kgCarg(s)-n0(s.kgEst):null;return `<tr><td><b>${esc(s.placa)}</b></td><td>${esc(s.horaProg)}</td><td>${esc(s.provNom)}<div class="muted">${esc(s.promotora)}</div></td><td>${esc(s.material)}</td><td class="num">${fk(s.kgEst)}</td><td><span class="pill ${pClass(s.estado)}">${esc(s.estado)}</span></td><td><input type="number" min="0" data-kr="${s.id}" value="${n0(s.kgReal)||''}" style="width:100px"></td><td><input type="number" min="0" data-kb="${s.id}" value="${n0(s.kgBascula)||''}" style="width:100px"></td><td class="num" style="color:${d==null?'':d<0?'#c62828':'#2e7d32'}">${d==null?'':(d>0?'+':'')+fk(d)}</td><td class="row">${s.estado==='Programada'?`<button class="btn sm m" type="button" data-act="ruta" data-id="${s.id}">En ruta</button>`:''}<button class="btn sm a" type="button" data-act="carg" data-id="${s.id}">Cargado</button><button class="btn sm" type="button" data-act="rec" data-id="${s.id}">Recibido planta</button></td></tr>`;}).join('')||'<tr><td colspan="10" class="muted">Sin registros para esta fecha.</td></tr>');
+}
+$('#cgEst').addEventListener('change',renderCargue);
+$('#tCargue').addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const s=S.solicitudes.find(x=>x.id===b.dataset.id);if(!s)return;
+  const kr=n0($(`[data-kr="${s.id}"]`).value),kb=n0($(`[data-kb="${s.id}"]`).value);
+  if(b.dataset.act==='ruta'){upsert('solicitudes',Object.assign({},s,{estado:'En ruta'}));regUbic(s.vehId,'En ruta a proveedor',s.provNom,'','');}
+  if(b.dataset.act==='carg'){ if(kr<=0){toast('Ingrese kg cargado');return;} upsert('solicitudes',Object.assign({},s,{estado:'Cargada',kgReal:kr,horaCargue:Date.now()}));}
+  if(b.dataset.act==='rec'){ if(kb<=0){toast('Ingrese kg de báscula');return;} upsert('solicitudes',Object.assign({},s,{estado:'Recibida en planta',kgReal:kr||s.kgReal||kb,kgBascula:kb,horaPlanta:Date.now()})); regUbic(s.vehId,'Disponible','Planta Biocírculo','',''); toast('Ingresó al inventario y el vehículo quedó disponible');}
+});
+
+/* ================= INVENTARIO ================= */
+function entradasDia(d,m){ return S.solicitudes.filter(s=>s.estado==='Recibida en planta'&&s.fecha===d&&s.material===m).reduce((a,s)=>a+kgCarg(s),0); }
+function movDia(d,m,tipo){ return S.inventario.filter(x=>x.fecha===d&&x.material===m&&x.tipo.startsWith(tipo)).reduce((a,x)=>a+n0(x.kg),0); }
+function invCalc(d){
+  const fechas=[...new Set([...S.inventario.map(x=>x.fecha),...S.solicitudes.filter(s=>s.estado==='Recibida en planta').map(s=>s.fecha)])].filter(x=>x<=d).sort();
+  if(!fechas.includes(d))fechas.push(d);
+  const res={};
+  mats().forEach(m=>{ let saldo=0,row=null;
+    fechas.forEach(f=>{ const conteo=S.inventario.filter(x=>x.fecha===f&&x.material===m&&x.tipo.startsWith('Conteo'));
+      const ini=conteo.length?conteo.reduce((a,x)=>a+n0(x.kg),0):saldo;
+      const en=entradasDia(f,m)+movDia(f,m,'Entrada'), sa=movDia(f,m,'Salida'), aj=movDia(f,m,'Ajuste');
+      saldo=ini+en-sa+aj; if(f===d)row={ini,en,sa,aj,fin:saldo}; });
+    res[m]=row||{ini:saldo,en:0,sa:0,aj:0,fin:saldo}; });
+  return res;
+}
+function renderInv(){
+  const sm=$('#invMat'),pv=sm.value; opts(sm,mats()); if(pv)sm.value=pv; const f=$('#fInv'); if(!f.fecha.value)f.fecha.value=fecha();
+  const R=invCalc(fecha()); const T={ini:0,en:0,sa:0,aj:0,fin:0,trans:0,proy:0};
+  const tr=Object.entries(R).map(([m,r])=>{const trans=S.solicitudes.filter(s=>s.fecha===fecha()&&s.material===m&&['Cargada','En ruta'].includes(s.estado)).reduce((a,s)=>a+(n0(s.kgReal)||n0(s.kgEst)),0); const proy=r.fin+trans; ['ini','en','sa','aj','fin'].forEach(k=>T[k]+=r[k]);T.trans+=trans;T.proy+=proy;return `<tr><td><b>${esc(m)}</b></td><td class="num">${fk(r.ini)}</td><td class="num" style="color:#2e7d32">${r.en?'+'+fk(r.en):''}</td><td class="num" style="color:#c62828">${r.sa?'-'+fk(r.sa):''}</td><td class="num">${r.aj?fk(r.aj):''}</td><td class="num"><b>${fk(r.fin)}</b></td><td class="num" style="color:#6a1b9a">${fk(trans)}</td><td class="num"><b style="color:#1565c0">${fk(proy)}</b></td></tr>`;});
+  $('#tInv').innerHTML='<tr><th>Material</th><th class="num">Inicial</th><th class="num">Entradas</th><th class="num">Salidas</th><th class="num">Ajustes</th><th class="num">Disponible</th><th class="num">En tránsito</th><th class="num">Proyectado</th></tr>'+tr.join('')+`<tr style="background:var(--v5)"><td><b>TOTAL</b></td>${['ini','en','sa','aj','fin','trans','proy'].map(k=>`<td class="num"><b>${fk(T[k])}</b></td>`).join('')}</tr>`;
+  const M=[...S.inventario.filter(x=>x.fecha===fecha()).map(x=>({h:x.updatedAt,t:x.tipo,m:x.material,kg:x.kg,o:x.obs,id:x.id})),...S.solicitudes.filter(s=>s.fecha===fecha()&&s.estado==='Recibida en planta').map(s=>({h:s.horaPlanta,t:'Entrada recolección',m:s.material,kg:kgCarg(s),o:s.provNom+' · '+s.placa}))].sort((a,b)=>n0(b.h)-n0(a.h));
+  $('#tInvMov').innerHTML='<tr><th>Hora</th><th>Tipo</th><th>Material</th><th class="num">Kg</th><th>Detalle</th><th></th></tr>'+(M.map(x=>`<tr><td>${hora(x.h)}</td><td>${esc(x.t)}</td><td>${esc(x.m)}</td><td class="num">${fk(x.kg)}</td><td>${esc(x.o)}</td><td>${x.id?`<button class="btn sm sec2" type="button" data-delinv="${x.id}">Anular</button>`:''}</td></tr>`).join('')||'<tr><td colspan="6" class="muted">Sin movimientos.</td></tr>');
+}
+$('#fInv').addEventListener('submit',e=>{e.preventDefault();const f=e.target;const kg=n0(f.kg.value);if(!kg&&!f.tipo.value.startsWith('Conteo')){toast('Ingrese kg');return;}
+  if(!f.tipo.value.startsWith('Ajuste')&&kg<0){toast('Kg no puede ser negativo');return;}
+  upsert('inventario',{id:uid(),fecha:f.fecha.value,material:f.material.value,tipo:f.tipo.value,kg,obs:f.obs.value.trim()});f.kg.value='';f.obs.value='';toast('Movimiento guardado');});
+$('#tInvMov').addEventListener('click',e=>{const b=e.target.closest('[data-delinv]');if(!b||!confirm('¿Anular movimiento?'))return;const x=S.inventario.find(i=>i.id===b.dataset.delinv);upsert('inventario',Object.assign({},x,{kg:0,obs:'ANULADO · '+x.obs}));});
+
+/* ================= CONDUCTOR ================= */
+function renderCond(){
+  const sel=$('#cdPlaca'); if(!sel.options.length){opts(sel,flota().map(v=>({v:v.id,t:v.placa+' · '+v.cond})));}
+  if(ROL==='conductor'&&ROL_PLACA){const v=flota().find(x=>x.placa===ROL_PLACA);if(v)sel.value=v.id;sel.disabled=true;}
+  const v=vehById(sel.value); if(!v){$('#cdBox').innerHTML='<p class="muted">Placa no encontrada.</p>';return;}
+  $('#cdLink').textContent='?rol=conductor&placa='+v.placa;
+  const X=solDia().filter(s=>s.vehId===v.id&&s.estado!=='Cancelada').sort((a,b)=>String(a.horaProg).localeCompare(String(b.horaProg)));
+  const u=ultimaUbic(v.id);
+  $('#cdBox').innerHTML=`<div class="row" style="justify-content:space-between"><div><span class="pl" style="font-size:22px;font-weight:800">${esc(v.placa)}</span> <span class="pill ${eClass(estadoVeh(v))}">${esc(estadoVeh(v))}</span><div class="muted">${esc(v.cond)} · ${esc(v.tipo)}</div></div><div class="muted">Último reporte: ${u?fechaHora(u.ts):'—'}</div></div>
+  <div class="row" style="margin:12px 0">${EST_VEH.filter(e=>e!=='Inactivo').map(e=>`<button class="btn sm ${e==='Mantenimiento'?'r':e==='Disponible'?'':'m'}" type="button" data-cde="${e}">${e}</button>`).join('')}</div>
+  <p class="muted" id="cdGps">Cada botón registra el estado y, si el celular lo permite, la ubicación GPS.</p>
+  <h3>Mis servicios de hoy (${X.length})</h3>${X.map(s=>`<div class="card" style="margin-bottom:8px;padding:10px"><div class="row" style="justify-content:space-between"><b>${esc(s.horaProg||'--:--')} · ${esc(s.provNom)}</b><span class="pill ${pClass(s.estado)}">${esc(s.estado)}</span></div><div class="muted">${esc(s.dir)} ${esc(s.zona)} · Disponible ${esc(s.franja||'--:--')}<br>${esc(s.material)} · ${fk(s.kgEst)} kg est. ${s.obs?'· '+esc(s.obs):''}</div>${s.dir?`<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.dir+' '+s.zona)}">🧭 Navegar</a>`:''}
+  ${['Programada','En ruta'].includes(s.estado)?`<div class="row" style="margin-top:6px"><input type="number" min="1" placeholder="Kg cargados" data-cdk="${s.id}" style="width:130px"><button class="btn sm a" type="button" data-cdc="${s.id}">Registrar cargue</button></div>`:''}</div>`).join('')||'<p class="muted">No tiene servicios programados para esta fecha.</p>'}`;
+}
+$('#cdPlaca').addEventListener('change',renderCond);
+$('#cdBox').addEventListener('click',e=>{
+  const v=vehById($('#cdPlaca').value);
+  const b=e.target.closest('[data-cde]'); if(b){ const est=b.dataset.cde; const fin=(la,ln)=>{regUbic(v.id,est,'',la,ln);toast('Estado: '+est);};
+    if(navigator.geolocation){ $('#cdGps').textContent='Obteniendo GPS…'; navigator.geolocation.getCurrentPosition(p=>fin(p.coords.latitude,p.coords.longitude),()=>fin('',''),{enableHighAccuracy:true,timeout:10000}); } else fin('',''); return; }
+  const c=e.target.closest('[data-cdc]'); if(c){ const s=S.solicitudes.find(x=>x.id===c.dataset.cdc); const kg=n0($(`[data-cdk="${s.id}"]`).value); if(kg<=0){toast('Ingrese los kg cargados');return;} upsert('solicitudes',Object.assign({},s,{estado:'Cargada',kgReal:kg,horaCargue:Date.now()})); toast('Cargue registrado'); }
+});
+
+/* ================= CONFIG ================= */
+function renderCfg(){
+  const f=$('#fCfg'),c=cfg(); f.metaDef.value=c.metaDef; f.metaDia.value=(c.metas||{})[fecha()]!=null?c.metas[fecha()]:''; f.mats.value=c.mats; f.url.value=c.url||'';
+  $('#tFlotaCfg').innerHTML='<tr><th>#</th><th>Placa</th><th>Transportador</th><th>Conductor</th><th>Tipo</th><th class="num">Cap. kg</th><th>Estado adm.</th><th></th></tr>'+flota().map(v=>`<tr><td>${v.n}</td><td><b>${esc(v.placa)}</b></td><td>${esc(v.transp)}</td><td>${esc(v.cond)}</td><td><select data-ft="${v.id}">${['CAMION','CAMIONETA','TRACTOMULA','SIN DEFINIR'].map(t=>`<option ${t===v.tipo?'selected':''}>${t}</option>`).join('')}</select></td><td><input type="number" min="0" data-fc="${v.id}" value="${v.cap||''}" style="width:90px"></td><td><select data-fe="${v.id}">${['ACTIVO','INACTIVO'].map(t=>`<option ${t===v.estado?'selected':''}>${t}</option>`).join('')}</select></td><td><button class="btn sm" type="button" data-fs="${v.id}">Guardar</button></td></tr>`).join('');
+  const pl={}; FLOTA_BASE.forEach(v=>pl[v.placa]=(pl[v.placa]||0)+1);
+  const nit={}; PROV_BASE.forEach(p=>(nit[p.c]=nit[p.c]||[]).push(p.n));
+  const dq=[]; Object.entries(pl).filter(x=>x[1]>1).forEach(x=>dq.push(`Placa <b>${x[0]}</b> aparece ${x[1]} veces en la flota (verifique tipo/conductor).`));
+  const sc=flota().filter(v=>!v.cap); if(sc.length)dq.push(`${sc.length} vehículo(s) sin tipo/capacidad: <b>${sc.map(v=>v.placa).join(', ')}</b>. Complete abajo para que la auto-programación los use.`);
+  Object.entries(nit).filter(x=>x[1].length>1).forEach(x=>dq.push(`NIT <b>${x[0]}</b> repetido en proveedores: ${x[1].map(esc).join(' / ')}.`));
+  $('#dq').innerHTML=dq.map(x=>'• '+x).join('<br>')||'Sin alertas.';
+}
+$('#fCfg').addEventListener('submit',e=>{e.preventDefault();const f=e.target;const c=Object.assign({},cfg());c.metaDef=Math.max(0,n0(f.metaDef.value));c.metas=Object.assign({},c.metas||{});if(f.metaDia.value!=='')c.metas[fecha()]=Math.max(0,n0(f.metaDia.value));else delete c.metas[fecha()];c.mats=f.mats.value.split(',').map(s=>s.trim()).filter(Boolean).join(', ')||MATS_DEF.join(', ');c.url=f.url.value.trim();upsert('config',c);toast('Configuración guardada');if(c.url)pull();});
+$('#tFlotaCfg').addEventListener('click',e=>{const b=e.target.closest('[data-fs]');if(!b)return;const id=b.dataset.fs;const tp=$(`[data-ft="${id}"]`).value;upsert('vehiculos',{id,tipo:tp,cap:Math.max(0,n0($(`[data-fc="${id}"]`).value)),estado:$(`[data-fe="${id}"]`).value});toast('Vehículo actualizado');});
+$('#btnExp').addEventListener('click',()=>descargar(JSON.stringify(S,null,1),'respaldo_biocirculo_'+hoyISO()+'.json','application/json'));
+$('#fileImp').addEventListener('change',e=>{const fl=e.target.files[0];if(!fl)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.solicitudes)throw 0;S=Object.assign(blank(),d);save();render();toast('Respaldo importado');}catch(x){toast('Archivo inválido');}};r.readAsText(fl);});
+$('#btnDemo').addEventListener('click',()=>{ if(!confirm('Se agregarán solicitudes de ejemplo para la fecha seleccionada. ¿Continuar?'))return; demo(); });
+$('#btnDemoX').addEventListener('click',()=>{ if(!confirm('¿Quitar todos los datos de ejemplo (DEMO)?'))return; S.solicitudes=S.solicitudes.filter(s=>s.obs!=='DEMO'); S.inventario=S.inventario.filter(s=>s.obs!=='DEMO'); S.ubicaciones=S.ubicaciones.filter(u=>!String(u.id).includes('u')||!u.ubic||u.fecha!==hoyISO()||u.estado===undefined?true:!/u\d+$/.test(u.id)); save(); render(); toast('Datos de ejemplo eliminados'); });
+function descargar(txt,name,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+$('#btnCopyGs').addEventListener('click',()=>{navigator.clipboard&&navigator.clipboard.writeText($('#gsCode').textContent).then(()=>toast('Código copiado'));});
+
+function demo(){
+  const zonas=['Engativá','Kennedy','Suba','Mosquera','Funza','Soacha','Fontibón','Bosa','Cota','Chía'];
+  const M=mats(); const d=fecha(); const fl=flota().filter(v=>v.cap&&v.estado==='ACTIVO');
+  for(let i=0;i<22;i++){ const p=PROV_BASE[(i*37+11)%PROV_BASE.length]; const st=i<6?'Recibida en planta':i<9?'Cargada':i<12?'En ruta':i<17?'Programada':'Pendiente'; const v=st==='Pendiente'?null:fl[i%fl.length]; const kg=300+((i*173)%1900);
+    const kr=['Cargada','Recibida en planta'].includes(st)?Math.round(kg*(0.85+((i*7)%30)/100)):0;
+    const r={id:uid()+i,fecha:d,promotora:p.p,provCod:p.c,provNom:p.n,material:M[i%Math.min(9,M.length)],kgEst:kg,pacas:0,zona:zonas[i%zonas.length],dir:'Dirección de ejemplo '+(i+1),contacto:'',franja:i%3?'07:00':'13:00',prioridad:i%7===0?'Urgente':'Normal',tipoReq:'',obs:'DEMO',estado:st,vehId:v?v.id:'',placa:v?v.placa:'',horaProg:v?String(6+(i%10)).padStart(2,'0')+':00':'',kgReal:kr,kgBascula:st==='Recibida en planta'?kr:0,creado:Date.now()-i*600000,horaPlanta:st==='Recibida en planta'?Date.now()-i*300000:0,updatedAt:Date.now()};
+    S.solicitudes.push(r); S.queue.push({t:'solicitudes',id:r.id}); }
+  const geo=[[4.70,-74.11],[4.63,-74.15],[4.74,-74.08],[4.71,-74.23],[4.60,-74.19],[4.68,-74.14]];
+  fl.slice(0,10).forEach((v,i)=>{const r={id:uid()+'u'+i,vehId:v.id,placa:v.placa,estado:EST_VEH[i%5],ubic:zonas[i%zonas.length],lat:geo[i%6][0]+i*0.004,lng:geo[i%6][1]-i*0.003,ts:Date.now()-i*420000,fecha:hoyISO(),updatedAt:Date.now()};S.ubicaciones.push(r);S.queue.push({t:'ubicaciones',id:r.id});});
+  M.slice(0,6).forEach((m,i)=>{const r={id:uid()+'i'+i,fecha:d,material:m,tipo:'Conteo físico (saldo inicial)',kg:2000+i*850,obs:'DEMO',updatedAt:Date.now()};S.inventario.push(r);S.queue.push({t:'inventario',id:r.id});});
+  save();push();render();toast('Datos de ejemplo cargados');
+}
+
+/* ================= SINCRONIZACION EN LINEA ================= */
+const NUMK=['kgEst','pacas','kgReal','kgBascula','creado','updatedAt','ts','lat','lng','kg','cap','horaCargue','horaPlanta','metaDef'];
+function norm(r){ NUMK.forEach(k=>{ if(r[k]!==undefined&&r[k]!==''&&r[k]!==null){const x=Number(r[k]); if(isFinite(x))r[k]=x;} }); }
+let syncing=false;
+function setSync(t,ok){ const e=$('#syncTag'); e.textContent=t; e.style.background=ok===false?'rgba(198,40,40,.6)':'rgba(255,255,255,.18)'; }
+async function push(){
+  const url=(cfg().url&&String(cfg().url).includes('/exec'))?cfg().url:SYNC_URL; if(syncing||!S.queue.length)return; syncing=true;
+  const q=S.queue.splice(0); const by={}; q.forEach(x=>{const r=S[x.t].find(y=>y.id===x.id);if(r){(by[x.t]=by[x.t]||{})[x.id]=r;}});
+  try{ for(const t of Object.keys(by)){ const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'upsert',table:t,records:Object.values(by[t])})}); if(!res.ok)throw new Error(res.status); }
+    setSync('● En línea · '+new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'})); save();
+  }catch(e){ S.queue=q.concat(S.queue); save(); setSync('● Sin conexión (pendiente '+S.queue.length+')',false); }
+  syncing=false;
+}
+async function pull(){
+  const url=(cfg().url&&String(cfg().url).includes('/exec'))?cfg().url:SYNC_URL;
+  try{ const res=await fetch(url,{method:'GET',cache:'no-store',redirect:'follow'}); if(!res.ok)throw new Error('HTTP '+res.status); const txt=await res.text(); let d; try{d=JSON.parse(txt.replace(/^\uFEFF/,''));}catch(pe){throw new Error('Respuesta no JSON: '+txt.slice(0,120));} if(!d||!d.tables)throw new Error('Respuesta sin tables');
+    let ch=false; TABLES.forEach(t=>{ (d.tables[t]||[]).forEach(r=>{ norm(r); if(t==='config'){r.url=SYNC_URL;if(typeof r.metas==='string'){try{r.metas=JSON.parse(r.metas);}catch(e){r.metas={};}}} const i=S[t].findIndex(x=>x.id===r.id); if(i<0){S[t].push(r);ch=true;} else if(n0(r.updatedAt)>n0(S[t][i].updatedAt)){S[t][i]=r;ch=true;} }); });
+    if(ch){save();render();} setSync('● En línea · '+new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}));
+    if(S.queue.length)push();
+  }catch(e){ console.error('SYNC PULL',e); setSync('● Sin conexión con la hoja',false); toast('Error de lectura: '+(e&&e.message?e.message:'conexión bloqueada por el navegador')); }
+}
+$('#btnSync').addEventListener('click',()=>{ if(!cfg().url){toast('Configure la URL en ⚙️ Configuración');go('cfg');return;} push().then(pull); });
+
+/* ================= MODAL ================= */
+function modal(h){ $('#modal').innerHTML=h; $('#mbg').classList.add('on'); }
+function closeModal(){ $('#mbg').classList.remove('on'); }
+$('#mbg').addEventListener('click',e=>{ if(e.target.id==='mbg'||e.target.closest('[data-close]'))closeModal(); });
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+/* ================= RENDER GENERAL ================= */
+function render(){
+  try{
+    if(cur==='panel')renderPanel(); if(cur==='sol'){prepSolForm();renderSol();} if(cur==='prog')renderProg();
+    if(cur==='flota'){renderFlota();if(MAP)mapaRender();} if(cur==='cargue')renderCargue(); if(cur==='inv')renderInv(); if(cur==='cond')renderCond(); if(cur==='cfg')renderCfg();
+  }catch(e){ console.error(e); toast('Error: '+e.message); }
+}
+$('#gFecha').value=hoyISO(); $('#gFecha').addEventListener('change',()=>{ $('#fSol').fecha.value=fecha(); $('#fInv').fecha.value=fecha(); render(); });
+opts($('#pPromo'),PROMOTORAS,'Todas'); $('#pPromo').addEventListener('change',renderPanel);
+opts($('#lsPromo'),PROMOTORAS,'Todas'); opts($('#lsEst'),EST_SOL,'Todos');
+$('#gsCode').textContent=document.getElementById('gs-src').textContent.trim();
+aplicarRol(); render(); cfg().url=SYNC_URL; save(); setSync('● Conectando…'); pull();
+setInterval(()=>{ if(cfg().url){ push().then(pull); } else if(cur==='panel') renderPanel(); },30000);
+})();
+</script>
+
+</body>
+</html>
